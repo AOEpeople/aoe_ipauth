@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for the Sony Product Feeds extension in the FRONTEND</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_sonyproductfeeds_domain_model_configuration">Configuration Object for Feeds</label>
+			<label index="tx_sonyproductfeeds_domain_model_configuration.title">Title (for internal use)</label>
+			<label index="tx_sonyproductfeeds_domain_model_configuration.urls">Feed URLs for the current tree</label>
+			<label index="tx_sonyproductfeeds_domain_model_configuration.target_fces">FCEs that should be updated by this configuration.</label>
+
+			<label index="tx_sonyproductfeeds_task_ingestortask.name">Ingestor Task</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.description">Ingestor Task Description</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.service.empty">All services appear to be taken. You cannot save this task without assigning a valid service.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.mapping">Mapping</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.kamaji_mapping">Kamaji Mapping</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.mapping.empty">Mapping must not be empty.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.kamaji_mapping.empty">Kamaji Mapping must not be empty.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.mapping.invalid">Mapping is invalid. Use ";" as separator and make sure you start new lines with the Enter key.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.kamaji_mapping.invalid">Kamaji Mapping is invalid. Use ";" as separator and make sure you start new lines with the Enter key.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.service">Service</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.service.games">Games</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.service.music">Music</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.service.video">Video</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.resourcefields">Resource Fields (separate with ,)</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.idfield">ID Field</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.idfield.empty">ID Field must not be empty.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.idfield.invalid">The ID field is unknown for this service.</label>
+			<label index="tx_sonyproductfeeds_task_ingestortask.debug">Log debugging information</label>
+		</languageKey>
+	</data>
+</T3locallang>

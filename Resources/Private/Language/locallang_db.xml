@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'aoe_ipauth'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_aoeipauth_domain_model_ip">IP</label>
+			<label index="tx_aoeipauth_domain_model_ip.hidden">Disable</label>
+			<label index="tx_aoeipauth_domain_model_ip.ip">IP/IP Range</label>
+
+			<label index="fe_users.tx_aoeipauth_ip">Auto-Login User when coming from following IP/range</label>
+
+			<label index="fe_groups.tx_aoeipauth_ip">Auto-Login Group when coming from following IP/range</label>
+		</languageKey>
+	</data>
+</T3locallang>
