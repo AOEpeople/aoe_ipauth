@@ -24,7 +24,6 @@ $TCA['tx_aoeipauth_domain_model_ip'] = array(
 		),
 		'starttime' => array(
 			'exclude' => 1,
-			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config' => array(
 				'type' => 'input',
@@ -40,7 +39,6 @@ $TCA['tx_aoeipauth_domain_model_ip'] = array(
 		),
 		'endtime' => array(
 			'exclude' => 1,
-			'l10n_mode' => 'mergeIfNotBlank',
 			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config' => array(
 				'type' => 'input',
@@ -63,7 +61,17 @@ $TCA['tx_aoeipauth_domain_model_ip'] = array(
 				'eval' => 'trim,required'
 			),
 		),
-		'fe_entity' => array(
+		'fe_user' => array(
+			'config' => array(
+				'type' => 'passthrough',
+			),
+		),
+		'fe_group' => array(
+			'config' => array(
+				'type' => 'passthrough',
+			),
+		),
+		'range_type' => array(
 			'config' => array(
 				'type' => 'passthrough',
 			),

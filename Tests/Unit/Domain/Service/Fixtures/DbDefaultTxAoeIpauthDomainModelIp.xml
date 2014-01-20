@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<!-- IP Address used on Valid IP Auth Group -->
+	<tx_aoeipauth_domain_model_ip>
+		<uid>1</uid>
+		<pid>1</pid>
+		<ip>1.2.3.4</ip>
+		<deleted>0</deleted>
+		<hidden>0</hidden>
+		<fe_user>0</fe_user>
+		<fe_group>1</fe_group>
+	</tx_aoeipauth_domain_model_ip>
+
+	<!-- Inactive IPs -->
+	<tx_aoeipauth_domain_model_ip>
+		<uid>2</uid>
+		<pid>1</pid>
+		<ip>1.2.3.4</ip>
+		<deleted>0</deleted>
+		<hidden>1</hidden>
+		<fe_user>0</fe_user>
+		<fe_group>1</fe_group>
+	</tx_aoeipauth_domain_model_ip>
+	<tx_aoeipauth_domain_model_ip>
+		<uid>3</uid>
+		<pid>1</pid>
+		<ip>1.2.3.4</ip>
+		<deleted>1</deleted>
+		<hidden>0</hidden>
+		<fe_user>0</fe_user>
+		<fe_group>1</fe_group>
+	</tx_aoeipauth_domain_model_ip>
+</dataset>

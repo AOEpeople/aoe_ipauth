@@ -20,8 +20,10 @@ CREATE TABLE tx_aoeipauth_domain_model_ip (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
-	fe_entity int(11) unsigned DEFAULT '0' NOT NULL,
+	fe_user int(11) unsigned DEFAULT '0' NOT NULL,
+	fe_group int(11) unsigned DEFAULT '0' NOT NULL,
 	ip varchar(255) DEFAULT '' NOT NULL,
+	range_type tinyint(4) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

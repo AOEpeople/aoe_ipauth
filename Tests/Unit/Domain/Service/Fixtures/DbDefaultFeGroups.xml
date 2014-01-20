@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<fe_groups>
+		<uid>1</uid>
+		<pid>1</pid>
+		<title>Valid IP Auth Group</title>
+		<deleted>0</deleted>
+		<hidden>0</hidden>
+		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
+	</fe_groups>
+
+	<!-- Inactive -->
+	<fe_groups>
+		<uid>2</uid>
+		<pid>1</pid>
+		<title>Hidden IP Auth Group</title>
+		<deleted>0</deleted>
+		<hidden>1</hidden>
+		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
+	</fe_groups>
+	<fe_groups>
+		<uid>3</uid>
+		<pid>1</pid>
+		<title>Deleted IP Auth Group</title>
+		<deleted>1</deleted>
+		<hidden>0</hidden>
+		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
+	</fe_groups>
+</dataset>
