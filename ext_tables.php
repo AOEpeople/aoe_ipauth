@@ -78,4 +78,12 @@ t3lib_extMgm::addToAllTCAtypes('fe_groups','tx_aoeipauth_ip;;;;1-1-1', '', 'afte
 t3lib_extMgm::addLLrefForTCAdescr('fe_groups', 'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_fe_groups.xml');
 unset($tempColumns);
 
+if ('BE' == TYPO3_MODE) {
+	// registering reports
+	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_reports']['status']['providers'][$_EXTKEY] = array(
+		'Tx_AoeIpauth__Report_IpGroupAuthenticationStatus',
+	);
+}
+
+
 ?>
