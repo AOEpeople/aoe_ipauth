@@ -7,7 +7,13 @@
 	</meta>
 	<data type="array">
 	<languageKey index="default" type="array">
-			<label index="ip.description">Enter IP or IP range</label>
+			<label index="ip.description"><![CDATA[
+			Enter IP or IP range. Examples:<br />
+			- Simple IP: 192.168.2.4<br />
+			- Wildcard IP: 192.168.2.*<br />
+			- IP Range: 192.168.2.4-192.168.2.10<br />
+			- CIDR Range: 192.168.2.0/24
+			]]></label>
 		</languageKey>
 	</data>
 </T3locallang>
