@@ -1,0 +1,2 @@
+  # cat=basic/enable; type=boolean; label=Enable IP auto login on site entry: If option is enabled on every entry into the site the user is checked for automatic login. Otherwise the user will be logged in only if a login session is started.
+fetchFeUserIfNoSession = 1

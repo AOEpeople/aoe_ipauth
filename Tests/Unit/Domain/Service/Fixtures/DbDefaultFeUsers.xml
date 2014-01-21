@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<fe_users>
+		<uid>1</uid>
+		<pid>1</pid>
+		<username>Valid IP Auth User</username>
+		<deleted>0</deleted>
+		<disable>0</disable>
+		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
+	</fe_users>
+
+	<!-- Inactive -->
+	<fe_users>
+		<uid>2</uid>
+		<pid>1</pid>
+		<username>Hidden IP Auth User</username>
+		<deleted>0</deleted>
+		<disable>1</disable>
+		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
+	</fe_users>
+	<fe_users>
+		<uid>3</uid>
+		<pid>1</pid>
+		<username>Deleted IP Auth User</username>
+		<deleted>1</deleted>
+		<disable>0</disable>
+		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
+	</fe_users>
+</dataset>

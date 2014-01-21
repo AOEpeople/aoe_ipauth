@@ -60,19 +60,35 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_IpServiceTest extends Tx_AoeIpauth_
 	}
 
 	///////////////////////////
-	// Tests concerning findAllGroupsWithIpAuthentication
+	// Tests concerning findIpsByFeGroupId
 	///////////////////////////
-
 
 	/**
 	 * @test
 	 */
-	public function findAllGroupsWithIpAuthenticationFindsCorrectFeGroups() {
+	public function findIpsByFeGroupIdFindsCorrectIps() {
 
 		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
 		$ips = $this->fixture->findIpsByFeGroupId(1);
 		$expectedIps = array('1.2.3.4');
+
+		$this->assertEquals($ips, $expectedIps);
+	}
+
+	///////////////////////////
+	// Tests concerning findIpsByFeUserId
+	///////////////////////////
+
+	/**
+	 * @test
+	 */
+	public function findIpsByFeUserIdFindsCorrectIps() {
+
+		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
+
+		$ips = $this->fixture->findIpsByFeUserId(1);
+		$expectedIps = array('5.6.7.8');
 
 		$this->assertEquals($ips, $expectedIps);
 	}

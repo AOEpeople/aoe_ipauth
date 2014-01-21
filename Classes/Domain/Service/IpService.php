@@ -41,14 +41,35 @@ class Tx_AoeIpauth_Domain_Service_IpService implements t3lib_Singleton {
 	protected $pageSelect = NULL;
 
 	/**
+	 * Returns all ip domain model records that belong to a given fe_user uid
+	 *
+	 * @param int $uid fe_users uid
+	 * @return array
+	 */
+	public function findIpsByFeUserId($uid) {
+		return $this->findIpsByField('fe_user', $uid);
+	}
+
+	/**
 	 * Returns all ip domain model records that belong to a given fe_groups uid
 	 *
 	 * @param int $uid fe_groups uid
 	 * @return array
 	 */
 	public function findIpsByFeGroupId($uid) {
+		return $this->findIpsByField('fe_group', $uid);
+	}
+
+	/**
+	 * Finds IPs from the table by a given field and field value
+	 *
+	 * @param string $field
+	 * @param int $value
+	 * @return array
+	 */
+	protected function findIpsByField($field, $value) {
 		$enableFields = $this->getPageSelect()->enableFields(self::TABLE);
-		$ips = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('ip', self::TABLE, 'fe_group = ' . intval($uid) . ' ' . $enableFields);
+		$ips = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('ip', self::TABLE, $field . ' = ' . intval($value) . ' ' . $enableFields);
 		if (empty($ips)) {
 			return array();
 		}

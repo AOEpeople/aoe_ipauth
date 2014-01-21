@@ -33,17 +33,72 @@
  */
 class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 
-	// TODO: do we really need to getUser?
-
 	/**
 	 * @var Tx_AoeIpauth_Service_IpMatchingService
 	 */
 	protected $ipMatchingService = NULL;
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_FeGroupsService
+	 * @var Tx_AoeIpauth_Domain_Service_FeEntityService
 	 */
-	protected $feGroupsService = NULL;
+	protected $feEntityService = NULL;
+
+	/**
+	 * @var Tx_AoeIpauth_Domain_Service_IpService
+	 */
+	protected $ipService = NULL;
+
+	/**
+	 * Gets the user automatically
+	 *
+	 * @return bool
+	 */
+	public function getUser() {
+		// Do not respond to non-fe users and login attempts
+		if('getUserFE' != $this->mode || 'login' == $this->login['status']) {
+			return FALSE;
+		}
+
+		$clientIp = $this->authInfo['REMOTE_ADDR'];
+		$ipAuthenticatedUsers = $this->findAllUsersByIpAuthentication($clientIp);
+
+		if (empty($ipAuthenticatedUsers)) {
+			return FALSE;
+		}
+
+		$user = array_pop($ipAuthenticatedUsers);
+		return $user;
+	}
+
+	/**
+	 * Authenticate a user
+	 * Return 200 if the IP is right. This means that no more checks are needed. Otherwise authentication may fail because we may don't have a password.
+	 *
+	 * @param array Data of user.
+	 * @return bool
+	 */
+	public function authUser($user) {
+		$authCode = 100;
+
+		// Do not respond to non-fe users and login attempts
+		if('FE' != $this->authInfo['loginType'] || 'login' == $this->login['status']) {
+			return $authCode;
+		}
+		if (!isset($user['uid'])) {
+			return $authCode;
+		}
+
+		$clientIp = $this->authInfo['REMOTE_ADDR'];
+		$userId = $user['uid'];
+
+		$ipMatches = $this->doesCurrentUsersIpMatch($userId, $clientIp);
+
+		if ($ipMatches) {
+			$authCode = 200;
+		}
+
+		return $authCode;
+	}
 
 	/**
 	 * Get the group list
@@ -53,47 +108,81 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 	 * @return array
 	 */
 	public function getGroups($user, $knownGroups) {
-
 		// Do not respond to non-FE group calls
 		if('getGroupsFE' != $this->mode) {
 			return $knownGroups;
 		}
 
 		$clientIp = $this->authInfo['REMOTE_ADDR'];
-		$groups = $this->findAllGroupsWithIpAuthentication();
+		$ipAuthenticatedGroups = $this->findAllGroupsByIpAuthentication($clientIp);
 
-		if (empty($groups)) {
-			return $knownGroups;
-		}
-
-		// Walk each group and check if it matches
-		foreach ($groups as $group) {
-			$groupUid = $group['uid'];
-			$groupIps = $group['tx_aoeipauth_ip'];
-			unset($group['tx_aoeipauth_ip']);
-
-			$isWhitelisted = FALSE;
-			while (!$isWhitelisted && !empty($groupIps)) {
-				$ipWhitelist = array_pop($groupIps);
-				$isWhitelisted = $this->getIpMatchingService()->isIpAllowed($clientIp, $ipWhitelist);
-			}
-
-			if ($isWhitelisted) {
-				$knownGroups[$groupUid] = $group;
-			}
+		if (!empty($ipAuthenticatedGroups)) {
+			$knownGroups = array_merge($ipAuthenticatedGroups, $knownGroups);
 		}
 
 		return $knownGroups;
 	}
 
 	/**
-	 * Finds all groups with IP authentication enabled
+	 * Returns TRUE if the userId's associated IPs match the client IP
 	 *
+	 * @param int $userId
+	 * @param string $clientIp
+	 * @return bool
+	 */
+	protected function doesCurrentUsersIpMatch($userId, $clientIp) {
+		$isMatch = FALSE;
+		$ips = $this->getIpService()->findIpsByFeUserId($userId);
+
+		foreach ($ips as $ipWhitelist) {
+			if ($this->getIpMatchingService()->isIpAllowed($clientIp, $ipWhitelist)) {
+				$isMatch = TRUE;
+				break;
+			}
+		}
+		return $isMatch;
+	}
+
+	/**
+	 * Finds all users with IP authentication enabled
+	 *
+	 * @param string $ip
 	 * @return array
 	 */
-	protected function findAllGroupsWithIpAuthentication() {
-		$groups = $this->getFeGroupsService()->findAllGroupsWithIpAuthentication();
+	protected function findAllUsersByIpAuthentication($ip) {
+		$users = $this->getFeEntityService()->findAllUsersAuthenticatedByIp($ip);
+		return $users;
+	}
+
+	/**
+	 * Finds all groups with IP authentication enabled
+	 *
+	 * @param string $ip
+	 * @return array
+	 */
+	protected function findAllGroupsByIpAuthentication($ip) {
+		$groups = $this->getFeEntityService()->findAllGroupsAuthenticatedByIp($ip);
 		return $groups;
+	}
+
+	/**
+	 * @return Tx_AoeIpauth_Domain_Service_FeEntityService
+	 */
+	protected function getFeEntityService() {
+		if (NULL === $this->feEntityService) {
+			$this->feEntityService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_FeEntityService');
+		}
+		return $this->feEntityService;
+	}
+
+	/**
+	 * @return Tx_AoeIpauth_Domain_Service_IpService
+	 */
+	protected function getIpService() {
+		if (NULL === $this->ipService) {
+			$this->ipService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_IpService');
+		}
+		return $this->ipService;
 	}
 
 	/**
@@ -104,16 +193,6 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 			$this->ipMatchingService = t3lib_div::makeInstance('Tx_AoeIpauth_Service_IpMatchingService');
 		}
 		return $this->ipMatchingService;
-	}
-
-	/**
-	 * @return Tx_AoeIpauth_Domain_Service_FeGroupsService
-	 */
-	protected function getFeGroupsService() {
-		if (NULL === $this->feGroupsService) {
-			$this->feGroupsService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_FeGroupsService');
-		}
-		return $this->feGroupsService;
 	}
 }
 ?>

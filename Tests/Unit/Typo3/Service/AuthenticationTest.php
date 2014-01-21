@@ -60,6 +60,84 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	}
 
 	///////////////////////////
+	// Tests concerning getUser
+	///////////////////////////
+
+	/**
+	 * Data Provider for getUserAuthenticatesUser
+	 *
+	 * @return array
+	 */
+	public static function getUserAuthenticatesUserProvider() {
+		return array(
+			'one ip authenticated user' => array(
+				'192.168.1.200',
+				array(
+					array(
+						'uid' => 1,
+						'pid' => 1,
+						'username' => 'Test User',
+					)
+				),
+				array(
+					'uid' => 1,
+					'pid' => 1,
+					'username' => 'Test User',
+				),
+			),
+			'two ip authenticated users' => array(
+				'192.168.1.200',
+				array(
+					array(
+						'uid' => 1,
+						'pid' => 1,
+						'username' => 'Test User',
+					),
+					array(
+						'uid' => 2,
+						'pid' => 1,
+						'username' => 'Test User #2',
+					)
+				),
+				array(
+					'uid' => 2,
+					'pid' => 1,
+					'username' => 'Test User #2',
+				),
+			),
+			'no ip authenticated users' => array(
+				'192.168.1.200',
+				array(),
+				FALSE,
+			),
+		);
+	}
+
+	/**
+	 * @test
+	 * @dataProvider getUserAuthenticatesUserProvider
+	 */
+	public function getUserAuthenticatesUser($ip, $ipAuthenticatedUsers, $finalUserArray) {
+		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('findAllUsersByIpAuthentication'));
+
+		$stubbedFixture
+			->expects($this->any())
+			->method('findAllUsersByIpAuthentication')
+			->will($this->returnValue($ipAuthenticatedUsers));
+
+
+		$stubbedFixture->mode = 'getUserFE';
+		$stubbedFixture->authInfo = array(
+			'REMOTE_ADDR' => $ip,
+		);
+
+
+		$user = $stubbedFixture->getUser();
+
+		$this->assertEquals($user, $finalUserArray);
+	}
+
+	///////////////////////////
 	// Tests concerning getGroups
 	///////////////////////////
 
@@ -70,125 +148,27 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	 */
 	public static function getGroupsAuthenticatesGroupsProvider() {
 		return array(
-			'whitelisted simple ip' => array(
+			'one ip authenticated group' => array(
 				'192.168.1.200',
 				array(
 					array(
 						'uid' => 1,
 						'pid' => 1,
 						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.200')
 					)
 				),
 				array(
-					1 => array(
+					array(
 						'uid' => 1,
 						'pid' => 1,
 						'title' => 'Test Group',
+					),
+					array(
+						'uid' => 10,
+						'pid' => 1,
+						'title' => 'Test Group Existing',
 					)
 				)
-			),
-			'non-whitelisted simple ip' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.201')
-					)
-				),
-				array()
-			),
-			'whitelisted simple wildcard' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.*')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple wildcard' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.2.*')
-					)
-				),
-				array()
-			),
-			'whitelisted simple dash range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.201')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple dash range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.199')
-					)
-				),
-				array()
-			),
-			'whitelisted simple cidr range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.0/24')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple cidr range' => array(
-				'192.168.2.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.0/24')
-					)
-				),
-				array()
 			),
 		);
 	}
@@ -197,23 +177,76 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	 * @test
 	 * @dataProvider getGroupsAuthenticatesGroupsProvider
 	 */
-	public function getGroupsAuthenticatesGroups($ip, $knownGroups, $finalGroupArray) {
+	public function getGroupsAuthenticatesGroups($ip, $ipAuthenticatedGroups, $finalGroupArray) {
 
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('findAllGroupsWithIpAuthentication'));
+		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('findAllGroupsByIpAuthentication'));
 
 		$stubbedFixture
 			->expects($this->any())
-			->method('findAllGroupsWithIpAuthentication')
-			->will($this->returnValue($knownGroups));
+			->method('findAllGroupsByIpAuthentication')
+			->will($this->returnValue($ipAuthenticatedGroups));
 
 
 		$stubbedFixture->mode = 'getGroupsFE';
 		$stubbedFixture->authInfo = array(
 			'REMOTE_ADDR' => $ip,
 		);
-		$groups = $stubbedFixture->getGroups('', array());
+		$existingGroups = array(
+			array(
+				'uid' => 10,
+				'pid' => 1,
+				'title' => 'Test Group Existing',
+			)
+		);
+		$groups = $stubbedFixture->getGroups('', $existingGroups);
 
-		$this->assertSame($groups, $finalGroupArray);
+		$this->assertEquals($groups, $finalGroupArray);
+	}
+
+	///////////////////////////
+	// Tests concerning authUser
+	///////////////////////////
+
+	/**
+	 * @test
+	 */
+	public function authUserAuthenticatesIpWhenUserIpMatches() {
+		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('doesCurrentUsersIpMatch'));
+
+		$stubbedFixture
+			->expects($this->any())
+			->method('doesCurrentUsersIpMatch')
+			->will($this->returnValue(TRUE));
+
+		// Should work
+		$stubbedFixture->authInfo = array(
+			'loginType' => 'FE',
+			'REMOTE_ADDR' => '1.2.3.4',
+		);
+
+		$user = $stubbedFixture->authUser(array('uid' => 1));
+		$this->assertSame(200, $user);
+	}
+
+	/**
+	 * @test
+	 */
+	public function authUserDoesNotAuthenticateWhenUserIpFails() {
+		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('doesCurrentUsersIpMatch'));
+
+		$stubbedFixture
+			->expects($this->any())
+			->method('doesCurrentUsersIpMatch')
+			->will($this->returnValue(FALSE));
+
+		// Should work
+		$stubbedFixture->authInfo = array(
+			'loginType' => 'FE',
+			'REMOTE_ADDR' => '1.2.3.4',
+		);
+
+		$user = $stubbedFixture->authUser(array('uid' => 1));
+		$this->assertSame(100, $user);
 	}
 
 }

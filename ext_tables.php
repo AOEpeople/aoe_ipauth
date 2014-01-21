@@ -82,6 +82,7 @@ if ('BE' == TYPO3_MODE) {
 	// registering reports
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_reports']['status']['providers'][$_EXTKEY] = array(
 		'Tx_AoeIpauth__Report_IpGroupAuthenticationStatus',
+		'Tx_AoeIpauth__Report_IpUserAuthenticationStatus',
 	);
 }
 

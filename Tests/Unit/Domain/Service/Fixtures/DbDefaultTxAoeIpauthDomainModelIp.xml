@@ -11,6 +11,17 @@
 		<fe_group>1</fe_group>
 	</tx_aoeipauth_domain_model_ip>
 
+	<!-- IP Address used on Valid IP Auth User -->
+	<tx_aoeipauth_domain_model_ip>
+		<uid>4</uid>
+		<pid>1</pid>
+		<ip>5.6.7.8</ip>
+		<deleted>0</deleted>
+		<hidden>0</hidden>
+		<fe_user>1</fe_user>
+		<fe_group>0</fe_group>
+	</tx_aoeipauth_domain_model_ip>
+
 	<!-- Inactive IPs -->
 	<tx_aoeipauth_domain_model_ip>
 		<uid>2</uid>

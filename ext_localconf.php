@@ -15,6 +15,8 @@ if ('BE' == TYPO3_MODE) {
 	// Hooks
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$_EXTKEY] = 'EXT:' . $_EXTKEY . '/Classes/Hooks/Tcemain.php:Tx_AoeIpauth_Hooks_Tcemain';
 } else if ('FE' == TYPO3_MODE) {
+
+	$GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_fetchUserIfNoSession'] = isset($_EXTCONF['fetchFeUserIfNoSession']) ? $_EXTCONF['fetchFeUserIfNoSession'] : 1;
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['nc_staticfilecache/class.tx_ncstaticfilecache.php']['createFile_initializeVariables'][$_EXTKEY] = 'EXT:' . $_EXTKEY . '/Classes/Hooks/Staticfilecache.php:Tx_AoeIpauth_Hooks_Staticfilecache->createFileInitializeVariables';
 }
 
@@ -23,7 +25,7 @@ t3lib_extMgm::addService($_EXTKEY,  'auth',  'tx_aoeipauth_typo3_service_authent
 	array(
 		'title' => 'IP Authentication',
 		'description' => 'Authenticates against IP addresses and ranges.',
-		'subtype' => 'getUserFE,getGroupsFE',
+		'subtype' => 'authUserFE,getUserFE,getGroupsFE',
 		'available' => TRUE,
 		// Must be higher than for tx_sv_auth (50) or tx_sv_auth will deny request unconditionally
 		'priority' => 80,

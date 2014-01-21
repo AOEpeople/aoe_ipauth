@@ -31,7 +31,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_AoeIpauth__Report_IpGroupAuthenticationStatus implements tx_reports_StatusProvider {
+class Tx_AoeIpauth__Report_IpUserAuthenticationStatus implements tx_reports_StatusProvider {
 
 	/**
 	 * @var Tx_Extbase_Object_ObjectManagerInterface The object manager
@@ -57,65 +57,65 @@ class Tx_AoeIpauth__Report_IpGroupAuthenticationStatus implements tx_reports_Sta
 
 		$this->myIp = t3lib_div::getIndpEnv('REMOTE_ADDR');
 
-		$this->analyseUserGroups($reports);
+		$this->analyseUses($reports);
 
 		return $reports;
 	}
 
 	/**
-	 * Analyses user groups
+	 * Analyses users
 	 *
 	 * @param array $reports
 	 */
-	protected function analyseUserGroups(&$reports) {
+	protected function analyseUses(&$reports) {
 
 		/** @var Tx_AoeIpauth_Domain_Service_FeEntityService $service */
 		$service = $this->objectManager->get('Tx_AoeIpauth_Domain_Service_FeEntityService');
 
-		$userGroups = $service->findAllGroupsWithIpAuthentication();
+		$users = $service->findAllUsersWithIpAuthentication();
 
-		if (empty($userGroups)) {
+		if (empty($users)) {
 			// Message that no user group has IP authentication
 			$reports[] = $this->objectManager->get('tx_reports_reports_status_Status',
-				'IP Usergroup Authentication',
-				'No user groups with IP authentication found',
-				'No user groups were found anywhere that are active and have an automatic IP authentication enabled. Your current IP is: <strong>' . $this->myIp . '</strong>',
+				'IP User Authentication',
+				'No users with IP authentication found',
+				'No users were found anywhere that are active and have an automatic IP authentication enabled. Your current IP is: <strong>' . $this->myIp . '</strong>',
 				tx_reports_reports_status_Status::INFO
 			);
 		} else {
 
 			$thisUrl = urlencode(t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
 
-			$userGroupInfo = '<br /><br /><table cellpadding="4" cellspacing="0" border="0">';
-			$userGroupInfo .= '<thead><tr><th style="padding-bottom: 10px;">User Group</th><th>IP/Range</th></tr></thead>';
-			$userGroupInfo .= '<tbody>';
+			$userInfo = '<br /><br /><table cellpadding="4" cellspacing="0" border="0">';
+			$userInfo .= '<thead><tr><th style="padding-bottom: 10px;">User</th><th>IP/Range</th></tr></thead>';
+			$userInfo .= '<tbody>';
 
 			// Add user group strings
-			foreach ($userGroups as $group) {
-				$uid = $group['uid'];
-				$ips = implode (', ', $group['tx_aoeipauth_ip']);
+			foreach ($users as $user) {
+				$uid = $user['uid'];
+				$ips = implode (', ', $user['tx_aoeipauth_ip']);
 
-				$fullRecord = t3lib_BEfunc::getRecord('fe_groups', $uid);
-				$title = $fullRecord['title'];
+				$fullRecord = t3lib_BEfunc::getRecord('fe_users', $uid);
+				$title = $fullRecord['username'];
 
 
-				$button = '<a title="Edit record" onclick="window.location.href=\'alt_doc.php?returnUrl=' . $thisUrl . '&amp;edit[fe_groups][' . $uid . ']=edit\'; return false;" href="#">' .
+				$button = '<a title="Edit record" onclick="window.location.href=\'alt_doc.php?returnUrl=' . $thisUrl . '&amp;edit[fe_users][' . $uid . ']=edit\'; return false;" href="#">' .
 							'<span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-open">&nbsp;</span>' .
 						  '</a>';
 
-				$userGroupInfo .= '<tr><td style="padding: 0 20px 0 0;">' .  $button . $title . '</td><td>' . $ips . '</td></tr>';
+				$userInfo .= '<tr><td style="padding: 0 20px 0 0;">' .  $button . $title . '</td><td>' . $ips . '</td></tr>';
 			}
 
-			$userGroupInfo .= '</tbody>';
-			$userGroupInfo .= '</table>';
+			$userInfo .= '</tbody>';
+			$userInfo .= '</table>';
 
-			$userGroupInfo .= '<br /><br />Your current IP is: <strong>' . $this->myIp . '</strong>';
+			$userInfo .= '<br /><br />Your current IP is: <strong>' . $this->myIp . '</strong>';
 
 			// Inform about the groups
 			$reports[] = $this->objectManager->get('tx_reports_reports_status_Status',
-				'IP Usergroup Authentication',
-				'Some groups with automatic IP authentication were found.',
-				$userGroupInfo,
+				'IP User Authentication',
+				'Some users with automatic IP authentication were found.',
+				$userInfo,
 				tx_reports_reports_status_Status::OK
 			);
 		}
