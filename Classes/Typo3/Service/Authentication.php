@@ -49,6 +49,21 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 	protected $ipService = NULL;
 
 	/**
+	 * Makes sure the TCA is readable, necessary for enableFields to work
+	 * Is de-facto called when using the Preview BE Module
+	 *
+	 * @return void
+	 */
+	protected function safeguardContext() {
+		if (!isset($GLOBALS['TSFE'])) {
+			return;
+		}
+		if (!isset($GLOBALS['TCA'][Tx_AoeIpauth_Domain_Service_FeEntityService::TABLE_USER])) {
+			$GLOBALS['TSFE']->getCompressedTCarray();
+		}
+	}
+
+	/**
 	 * Gets the user automatically
 	 *
 	 * @return bool
@@ -58,6 +73,8 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 		if('getUserFE' != $this->mode || 'login' == $this->login['status']) {
 			return FALSE;
 		}
+
+		$this->safeguardContext();
 
 		$clientIp = $this->authInfo['REMOTE_ADDR'];
 		$ipAuthenticatedUsers = $this->findAllUsersByIpAuthentication($clientIp);
@@ -78,6 +95,9 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 	 * @return bool
 	 */
 	public function authUser($user) {
+
+		$this->safeguardContext();
+
 		$authCode = 100;
 
 		// Do not respond to non-fe users and login attempts
@@ -112,6 +132,8 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 		if('getGroupsFE' != $this->mode) {
 			return $knownGroups;
 		}
+
+		$this->safeguardContext();
 
 		$clientIp = $this->authInfo['REMOTE_ADDR'];
 		$ipAuthenticatedGroups = $this->findAllGroupsByIpAuthentication($clientIp);
