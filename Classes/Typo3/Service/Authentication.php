@@ -59,6 +59,9 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 			return;
 		}
 		if (!isset($GLOBALS['TCA'][Tx_AoeIpauth_Domain_Service_FeEntityService::TABLE_USER])) {
+			if (empty($GLOBALS['TSFE']->sys_page)) {
+				$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+			}
 			$GLOBALS['TSFE']->getCompressedTCarray();
 		}
 	}
