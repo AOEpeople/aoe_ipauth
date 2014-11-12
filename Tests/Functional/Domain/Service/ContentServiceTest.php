@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,35 +25,43 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
- * Test case for class Tx_AoeIpauth_Service_IpMatchingService.
+ * Class ContentServiceTest
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @package TYPO3
- * @subpackage AOE IP Auth
- *
- * @author DEV <dev@aoemedia.de>
+ * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIpauth_Tests_Unit_BaseDatabaseTest {
+class ContentServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_ContentService
+	 * @var \AOE\AoeIpauth\Domain\Service\ContentService
 	 */
 	protected $fixture;
 
 	/**
-	 *
+	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+	 */
+	protected $objectManager;
+
+	/**
+	 * SetUp
 	 */
 	public function setUp() {
-		$this->fixture = $this->objectManager->get('Tx_AoeIpauth_Domain_Service_ContentService');
+		$this->testExtensionsToLoad = array(
+			'typo3conf/ext/aoe_ipauth',
+		);
 		parent::setUp();
+
+		$this->fixturePath = __DIR__ . '/Fixtures/';
+
+		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\ContentService');
 	}
 
 	/**
-	 *
+	 * TearDown
 	 */
 	public function tearDown() {
 		unset($this->fixture);
@@ -67,7 +76,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 	 * @test
 	 */
 	public function isPageUserCustomizedWorks() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
 		$language = 0;
 
@@ -88,7 +96,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 	 * @test
 	 */
 	public function isPageUserCustomizedWorksForOverlays() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
 		$language = 2;
 
@@ -113,7 +120,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 	 * @test
 	 */
 	public function findUserCustomizedContentByPageIdWorks() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
 		$language = 0;
 
@@ -121,7 +127,7 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 		$expectedContent = array(
 			array(
 				'uid' => 205,
-				'pid'=> 1,
+				'pid' => 1,
 			)
 		);
 
@@ -132,7 +138,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 	 * @test
 	 */
 	public function findUserCustomizedContentByPageIdWorksForOverlays() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
 		$language = 2;
 
@@ -140,7 +145,7 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 		$expectedContent = array(
 			array(
 				'uid' => 210,
-				'pid'=> 1,
+				'pid' => 1,
 			)
 		);
 
@@ -155,7 +160,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 	 * @test
 	 */
 	public function isPageBareUserCustomizedWorks() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
 		$language = 0;
 
@@ -173,7 +177,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 	 * @test
 	 */
 	public function isPageBareUserCustomizedWorksForOverlays() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
 		$language = 2;
 
@@ -183,6 +186,4 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_ContentServiceTest extends Tx_AoeIp
 		$isPageBareCustomized = $this->fixture->isPageBareUserCustomized(5, $language);
 		$this->assertTrue($isPageBareCustomized);
 	}
-
 }
-?>

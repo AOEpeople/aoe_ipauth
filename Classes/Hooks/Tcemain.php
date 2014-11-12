@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Hooks;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,19 +25,23 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use AOE\AoeIpauth\Service\IpMatchingService;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /**
+ * Class Tcemain
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Hooks
  */
-class Tx_AoeIpauth_Hooks_Tcemain {
+class Tcemain {
 
 	const IP_TABLE = 'tx_aoeipauth_domain_model_ip';
 
 	/**
-	 * @var Tx_Extbase_Object_ObjectManagerInterface The object manager
+	 * @var ObjectManager
 	 */
 	protected $objectManager;
 
@@ -56,42 +61,48 @@ class Tx_AoeIpauth_Hooks_Tcemain {
 			return;
 		}
 
-		/** @var Tx_AoeIpauth_Service_IpMatchingService $ipMatchingService */
-		$ipMatchingService = $this->getObjectManager()->get('Tx_AoeIpauth_Service_IpMatchingService');
+		/** @var \AOE\AoeIpauth\Service\IpMatchingService $ipMatchingService */
+		$ipMatchingService = $this->getObjectManager()->get('AOE\\AoeIpauth\\Service\\IpMatchingService');
 
 		$potentialIp = $fieldArray['ip'];
 
 		// If it is a valid IP, return. No further action needed.
 		$isValidIp = $ipMatchingService->isValidIp($potentialIp);
 		if ($isValidIp) {
-			$fieldArray['range_type'] = Tx_AoeIpauth_Service_IpMatchingService::NORMAL_IP_TYPE;
+			$fieldArray['range_type'] = IpMatchingService::NORMAL_IP_TYPE;
 			return;
 		}
 
 		// Allow wildcard notations
 		$isValidWildcard = $ipMatchingService->isValidWildcardIp($potentialIp);
 		if ($isValidWildcard) {
-			$fieldArray['range_type'] = Tx_AoeIpauth_Service_IpMatchingService::WILDCARD_IP_TYPE;
+			$fieldArray['range_type'] = IpMatchingService::WILDCARD_IP_TYPE;
 			return;
 		}
 
 		// Allow dash-range notations
 		$isValidDashRange = $ipMatchingService->isValidDashRange($potentialIp);
 		if ($isValidDashRange) {
-			$fieldArray['range_type'] = Tx_AoeIpauth_Service_IpMatchingService::DASHRANGE_IP_TYPE;
+			$fieldArray['range_type'] = IpMatchingService::DASHRANGE_IP_TYPE;
 			return;
 		}
 
 		// Check if it is a valid CIDR range
 		$isValidRange = $ipMatchingService->isValidCidrRange($potentialIp);
 		if ($isValidRange) {
-			$fieldArray['range_type'] = Tx_AoeIpauth_Service_IpMatchingService::CIDR_IP_TYPE;
+			$fieldArray['range_type'] = IpMatchingService::CIDR_IP_TYPE;
 			return;
 		}
 
 		// Neither a valid IP nor a valid range
 		unset($fieldArray['ip']);
-		$this->addFlashMessage('The new IP (<strong>' . $potentialIp . '</strong>) you entered was neither a valid IP nor a valid range. The change was rejected.', t3lib_FlashMessage::ERROR);
+
+		$this->addFlashMessage(
+			'The new IP (<strong>' . $potentialIp . '</strong>) ' .
+				'you entered was neither a valid IP nor a valid range. ' .
+				'The change was rejected.',
+			FlashMessage::ERROR
+		);
 	}
 
 
@@ -103,28 +114,26 @@ class Tx_AoeIpauth_Hooks_Tcemain {
 	 * @return void
 	 */
 	protected function addFlashMessage($message, $code) {
-		$flashMessage = t3lib_div::makeInstance('t3lib_FlashMessage',
+		$flashMessage = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
 			$message,
 			'',
 			$code,
 			TRUE
 		);
-		t3lib_FlashMessageQueue::addMessage($flashMessage);
+		FlashMessageQueue::addMessage($flashMessage);
 	}
 
 	/**
 	 * Gets the object manager
 	 *
-	 * @return Tx_Extbase_Object_ObjectManager
+	 * @return ObjectManager
 	 */
 	protected function getObjectManager() {
 		// create object manager
 		if (!$this->objectManager) {
-			$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
+			$objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 			$this->objectManager =  clone $objectManager;
 		}
 		return $this->objectManager;
 	}
-
 }
-?>

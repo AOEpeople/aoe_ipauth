@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Tests\Unit\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,35 +25,30 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
- * Test case for class Tx_AoeIpauth_Service_IpMatchingService.
+ * Class IpMatchingServiceTest
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @package TYPO3
- * @subpackage AOE IP Auth
- *
- * @author DEV <dev@aoemedia.de>
+ * @package AOE\AoeIpauth\Tests\Unit\Service
  */
-class Tx_AoeIpauth_Tests_Unit_Service_IpMatchingServiceTest extends Tx_Extbase_Tests_Unit_BaseTestCase {
+class IpMatchingServiceTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
 
 	/**
-	 * @var Tx_AoeIpauth_Service_IpMatchingService
+	 * @var \AOE\AoeIpauth\Service\IpMatchingService
 	 */
 	protected $fixture;
 
 	/**
-	 *
+	 * setUp
 	 */
 	public function setUp() {
-		$this->fixture = $this->objectManager->get('Tx_AoeIpauth_Service_IpMatchingService');
 		parent::setUp();
+		$this->fixture = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Service\\IpMatchingService');
 	}
 
 	/**
-	 *
+	 * tearDown
 	 */
 	public function tearDown() {
 		unset($this->fixture);
@@ -313,4 +309,3 @@ class Tx_AoeIpauth_Tests_Unit_Service_IpMatchingServiceTest extends Tx_Extbase_T
 		$this->assertSame($this->fixture->isIpAllowed($givenIp, $whitelist), $expected);
 	}
 }
-?>

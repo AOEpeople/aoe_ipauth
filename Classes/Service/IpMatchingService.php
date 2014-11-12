@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, aoemedia GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,14 +25,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
+ * Class IpMatchingService
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Service
  */
-class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
+class IpMatchingService implements \TYPO3\CMS\Core\SingletonInterface {
 
 	const NORMAL_IP_TYPE = 0;
 	const WILDCARD_IP_TYPE = 2;
@@ -46,7 +47,7 @@ class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
 	 * @return bool
 	 */
 	public function isValidIp($possibleIp) {
-		$isValid = t3lib_div::validIP($possibleIp);
+		$isValid = GeneralUtility::validIP($possibleIp);
 		return $isValid;
 	}
 
@@ -66,7 +67,7 @@ class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
 		// Replace wildcards and simply validate the IP
 		$normalizedPossibleIp = str_replace('*', '50', $possibleIp);
 
-		$isValid = t3lib_div::validIPv4($normalizedPossibleIp);
+		$isValid = GeneralUtility::validIPv4($normalizedPossibleIp);
 		return $isValid;
 	}
 
@@ -95,7 +96,10 @@ class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
 	 * @return bool
 	 */
 	public function isValidCidrRange($possibleRange) {
-		$doesMatch = preg_match('#^((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)/(3[0-2]|[1-2]?[0-9])$#i', $possibleRange);
+		$doesMatch = preg_match(
+			'#^((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)/(3[0-2]|[1-2]?[0-9])$#i',
+			$possibleRange
+		);
 		return (1 === $doesMatch);
 	}
 
@@ -115,7 +119,7 @@ class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
 		if ($this->isValidIp($givenWhitelist)) {
 			// Simple IP
 			$isAllowed = ($givenIp == $givenWhitelist);
-		} else if ($this->isValidCidrRange($givenWhitelist)) {
+		} elseif ($this->isValidCidrRange($givenWhitelist)) {
 			// CIDR
 			list($range, $netmask) = explode('/', $givenWhitelist, 2);
 			$x = explode('.', $range);
@@ -144,7 +148,7 @@ class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
 
 			// Transform wildcard to dash range
 			if (FALSE !== strpos($givenWhitelist, '*')) {
-				// a.b.*.* format, just convert to A-B format by setting * to 0 for A and 255 for B
+				// a.b.*.* format, converts to A-B format by setting * to 0 for A and 255 for B
 				$lower = str_replace('*', '0', $givenWhitelist);
 				$upper = str_replace('*', '255', $givenWhitelist);
 				$dashRange = $lower . '-' . $upper;
@@ -153,14 +157,12 @@ class Tx_AoeIpauth_Service_IpMatchingService implements t3lib_Singleton {
 			// Validate dash range
 			if (FALSE !== strpos($dashRange, '-')) {
 				list($lower, $upper) = explode('-', $dashRange, 2);
-				$lowerDec = (float) sprintf("%u", ip2long($lower));
-				$upperDec = (float) sprintf("%u", ip2long($upper));
-				$givenIpDec = (float) sprintf("%u", ip2long($givenIp));
+				$lowerDec = (float)sprintf('%u', ip2long($lower));
+				$upperDec = (float)sprintf('%u', ip2long($upper));
+				$givenIpDec = (float)sprintf('%u', ip2long($givenIp));
 				$isAllowed =  (($givenIpDec >= $lowerDec) && ($givenIpDec <= $upperDec));
 			}
 		}
-
 		return $isAllowed;
 	}
 }
-?>

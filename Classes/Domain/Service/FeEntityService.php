@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, aoemedia GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,30 +25,26 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
+ * Class FeEntityService
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Domain\Service
  */
-class Tx_AoeIpauth_Domain_Service_FeEntityService implements t3lib_Singleton {
+class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface {
 
 	const TABLE_GROUP = 'fe_groups';
 	const TABLE_USER = 'fe_users';
 
 	/**
-	 * @var t3lib_pageSelect
-	 */
-	protected $pageSelect = NULL;
-
-	/**
-	 * @var Tx_AoeIpauth_Domain_Service_IpService
+	 * @var \AOE\AoeIpauth\Domain\Service\IpService
 	 */
 	protected $ipService = NULL;
 
 	/**
-	 * @var Tx_AoeIpauth_Service_IpMatchingService
+	 * @var \AOE\AoeIpauth\Service\IpMatchingService
 	 */
 	protected $ipMatchingService = NULL;
 
@@ -134,10 +131,10 @@ class Tx_AoeIpauth_Domain_Service_FeEntityService implements t3lib_Singleton {
 	 *
 	 * @param string $table
 	 * @return array
-	 * @throws RuntimeException
+	 * @throws \RuntimeException
 	 */
 	protected function findEntitiesWithIpAuthentication($table) {
-		$enableFields = $this->getPageSelect()->enableFields($table);
+		$enableFields = EnableFieldsUtility::enableFields($table);
 		$entities = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,pid', $table, 'tx_aoeipauth_ip > 0' . $enableFields);
 
 		if (empty($entities)) {
@@ -151,10 +148,10 @@ class Tx_AoeIpauth_Domain_Service_FeEntityService implements t3lib_Singleton {
 			$uid = $entity['uid'];
 			if (self::TABLE_GROUP == $table) {
 				$matchedIps = $this->getIpService()->findIpsByFeGroupId($uid);
-			} else if (self::TABLE_USER == $table) {
+			} elseif (self::TABLE_USER == $table) {
 				$matchedIps = $this->getIpService()->findIpsByFeUserId($uid);
 			} else {
-				throw new RuntimeException('Cannot load entries for unknown table.', 1390299890);
+				throw new \RuntimeException('Cannot load entries for unknown table.', 1390299890);
 			}
 
 			// Skip groups that do not find a corresponding ip
@@ -169,35 +166,23 @@ class Tx_AoeIpauth_Domain_Service_FeEntityService implements t3lib_Singleton {
 		return $finalEntities;
 	}
 
-
 	/**
-	 * @return t3lib_pageSelect
-	 */
-	protected function getPageSelect() {
-		if (NULL === $this->pageSelect) {
-			$this->pageSelect = t3lib_div::makeInstance('t3lib_pageSelect');
-		}
-		return $this->pageSelect;
-	}
-
-	/**
-	 * @return Tx_AoeIpauth_Domain_Service_IpService
+	 * @return \AOE\AoeIpauth\Domain\Service\IpService
 	 */
 	protected function getIpService() {
 		if (NULL === $this->ipService) {
-			$this->ipService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_IpService');
+			$this->ipService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Domain\\Service\\IpService');
 		}
 		return $this->ipService;
 	}
 
 	/**
-	 * @return Tx_AoeIpauth_Service_IpMatchingService
+	 * @return \AOE\AoeIpauth\Service\IpMatchingService
 	 */
 	protected function getIpMatchingService() {
 		if (NULL === $this->ipMatchingService) {
-			$this->ipMatchingService = t3lib_div::makeInstance('Tx_AoeIpauth_Service_IpMatchingService');
+			$this->ipMatchingService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Service\\IpMatchingService');
 		}
 		return $this->ipMatchingService;
 	}
 }
-?>

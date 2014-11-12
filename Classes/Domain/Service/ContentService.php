@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, aoemedia GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,26 +25,23 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
+ * Class ContentService
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Domain\Service
  */
-class Tx_AoeIpauth_Domain_Service_ContentService implements t3lib_Singleton {
+class ContentService implements \TYPO3\CMS\Core\SingletonInterface {
 
 	const CONTENT_TABLE = 'tt_content';
 	const PAGES_TABLE = 'pages';
 	const PAGES_OVERLAY_TABLE = 'pages_language_overlay';
 
 	/**
-	 * @var t3lib_pageSelect
-	 */
-	protected $pageSelect = NULL;
-
-	/**
-	 * Returns true if the page has content elements that depend on logged in users/user groups
+	 * Returns true if the page has content elements
+	 * that depend on logged in users/user groups
 	 *
 	 * @param int $uid
 	 * @param int $languageUid
@@ -65,34 +63,33 @@ class Tx_AoeIpauth_Domain_Service_ContentService implements t3lib_Singleton {
 	 * @return bool
 	 */
 	public function isPageBareUserCustomized($uid, $languageUid) {
-		$enableFields = $this->getPageSelect()->enableFields(self::PAGES_TABLE, -1, array('fe_group' => TRUE));
-		$pages = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,pid', self::PAGES_TABLE, ' fe_group != 0 AND uid = ' . intval($uid) . ' ' . $enableFields);
+		$enableFields = EnableFieldsUtility::enableFields(self::CONTENT_TABLE);
+		$pages = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'uid,pid',
+			self::PAGES_TABLE,
+			'fe_group != 0 AND uid = ' . intval($uid) . ' ' . $enableFields
+		);
 		$isPageCustomized = (count($pages) > 0);
 		return $isPageCustomized;
 	}
 
 	/**
 	 * Returns content elements that depend on logged in users/user groups
-	 * TODO: this will not consider: a) content that is displayed here but is only referenced, and b) content that is on the page but not used (not actually linked to the page)
+	 * TODO: this will not consider:
+	 * a) content that is displayed here but is only referenced, and
+	 * b) content that is on the page but not used
+	 * (not actually linked to the page)
 	 *
 	 * @param int $uid fe_groups uid
 	 * @param int $languageUid
 	 * @return array
 	 */
 	public function findUserCustomizedContentByPageId($uid, $languageUid) {
-		$enableFields = $this->getPageSelect()->enableFields(self::CONTENT_TABLE, -1, array('fe_group' => TRUE));
-		$ttContent = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,pid', self::CONTENT_TABLE, ' fe_group > 0 AND sys_language_uid = ' . intval($languageUid) . ' AND pid = ' . intval($uid) . ' ' . $enableFields);
+		$enableFields = EnableFieldsUtility::enableFields(self::CONTENT_TABLE);
+		$ttContent = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'uid,pid',
+			self::CONTENT_TABLE,
+			'fe_group > 0 AND sys_language_uid = ' . intval($languageUid) . ' AND pid = ' . intval($uid) . ' ' . $enableFields);
 		return $ttContent;
 	}
-
-	/**
-	 * @return t3lib_pageSelect
-	 */
-	protected function getPageSelect() {
-		if (NULL === $this->pageSelect) {
-			$this->pageSelect = t3lib_div::makeInstance('t3lib_pageSelect');
-		}
-		return $this->pageSelect;
-	}
 }
-?>
