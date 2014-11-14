@@ -78,5 +78,3 @@ $TCA['tx_aoeipauth_domain_model_ip'] = array(
 		),
 	),
 );
-
-?>

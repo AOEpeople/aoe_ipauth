@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, aoemedia GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,21 +25,17 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
+ * Class IpService
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Domain\Service
  */
-class Tx_AoeIpauth_Domain_Service_IpService implements t3lib_Singleton {
+class IpService implements  \TYPO3\CMS\Core\SingletonInterface {
 
 	const TABLE = 'tx_aoeipauth_domain_model_ip';
-
-	/**
-	 * @var t3lib_pageSelect
-	 */
-	protected $pageSelect = NULL;
 
 	/**
 	 * Returns all ip domain model records that belong to a given fe_user uid
@@ -68,7 +65,7 @@ class Tx_AoeIpauth_Domain_Service_IpService implements t3lib_Singleton {
 	 * @return array
 	 */
 	protected function findIpsByField($field, $value) {
-		$enableFields = $this->getPageSelect()->enableFields(self::TABLE);
+		$enableFields = EnableFieldsUtility::enableFields(self::TABLE);
 		$ips = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('ip', self::TABLE, $field . ' = ' . intval($value) . ' ' . $enableFields);
 		if (empty($ips)) {
 			return array();
@@ -80,16 +77,4 @@ class Tx_AoeIpauth_Domain_Service_IpService implements t3lib_Singleton {
 
 		return $finalIps;
 	}
-
-	/**
-	 * @return t3lib_pageSelect
-	 */
-	protected function getPageSelect() {
-		if (NULL === $this->pageSelect) {
-			$this->pageSelect = t3lib_div::makeInstance('t3lib_pageSelect');
-		}
-		return $this->pageSelect;
-	}
-
 }
-?>

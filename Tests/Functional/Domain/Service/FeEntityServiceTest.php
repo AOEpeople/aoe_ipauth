@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,31 +25,39 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
- * Test case for class Tx_AoeIpauth_Service_IpMatchingService.
+ * Class FeEntityServiceTest
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @package TYPO3
- * @subpackage AOE IP Auth
- *
- * @author DEV <dev@aoemedia.de>
+ * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeIpauth_Tests_Unit_BaseDatabaseTest {
+class FeEntityServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_FeEntityService
+	 * @var \AOE\AoeIpauth\Domain\Service\FeEntityService
 	 */
 	protected $fixture;
+
+	/**
+	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+	 */
+	protected $objectManager;
 
 	/**
 	 *
 	 */
 	public function setUp() {
-		$this->fixture = $this->objectManager->get('Tx_AoeIpauth_Domain_Service_FeEntityService');
+		$this->testExtensionsToLoad = array(
+			'typo3conf/ext/aoe_ipauth',
+		);
 		parent::setUp();
+
+		$this->fixturePath = __DIR__ . '/Fixtures/';
+
+		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
 	}
 
 	/**
@@ -67,7 +76,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeI
 	 * @test
 	 */
 	public function findAllGroupsWithIpAuthenticationFindsCorrectFeGroups() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultFeGroups.xml');
 		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
@@ -91,7 +99,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeI
 	 * @test
 	 */
 	public function findAllUsersWithIpAuthenticationFindsCorrectFeUsers() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultFeUsers.xml');
 		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
@@ -110,7 +117,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeI
 	///////////////////////////
 	// Tests concerning findAllGroupsAuthenticatedByIp
 	///////////////////////////
-
 
 	/**
 	 * Data Provider for findAllGroupsAuthenticatedByIpGetsCorrectGroups
@@ -247,8 +253,7 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeI
 	 * @dataProvider findAllGroupsAuthenticatedByIpGetsCorrectGroupsProvider
 	 */
 	public function findAllGroupsAuthenticatedByIpGetsCorrectGroups($ip, $knownGroups, $finalGroupArray) {
-
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Domain_Service_FeEntityService', array('findEntitiesWithIpAuthentication'));
+		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
 		$stubbedFixture
 			->expects($this->any())
@@ -400,8 +405,7 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeI
 	 * @dataProvider findAllUsersAuthenticatedByIpGetsCorrectUsersProvider
 	 */
 	public function findAllUsersAuthenticatedByIpGetsCorrectUsers($ip, $knownUsers, $finalUserArray) {
-
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Domain_Service_FeEntityService', array('findEntitiesWithIpAuthentication'));
+		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
 		$stubbedFixture
 			->expects($this->any())
@@ -413,4 +417,3 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_FeEntityServiceTest extends Tx_AoeI
 		$this->assertSame($users, $finalUserArray);
 	}
 }
-?>

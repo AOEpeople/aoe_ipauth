@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Typo3\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, aoemedia GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,27 +25,28 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
+ * Class Authentication
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Typo3\Service
  */
-class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
+class Authentication extends \TYPO3\CMS\Sv\AbstractAuthenticationService {
+
 
 	/**
-	 * @var Tx_AoeIpauth_Service_IpMatchingService
+	 * @var \AOE\AoeIpauth\Service\IpMatchingService
 	 */
 	protected $ipMatchingService = NULL;
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_FeEntityService
+	 * @var \AOE\AoeIpauth\Domain\Service\FeEntityService
 	 */
 	protected $feEntityService = NULL;
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_IpService
+	 * @var \AOE\AoeIpauth\Domain\Service\IpService
 	 */
 	protected $ipService = NULL;
 
@@ -58,9 +60,10 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 		if (!isset($GLOBALS['TSFE'])) {
 			return;
 		}
-		if (!isset($GLOBALS['TCA'][Tx_AoeIpauth_Domain_Service_FeEntityService::TABLE_USER])) {
+
+		if (!isset($GLOBALS['TCA'][\AOE\AoeIpauth\Domain\Service\FeEntityService::TABLE_USER])) {
 			if (empty($GLOBALS['TSFE']->sys_page)) {
-				$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+				$GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 			}
 			$GLOBALS['TSFE']->getCompressedTCarray();
 		}
@@ -73,7 +76,7 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 	 */
 	public function getUser() {
 		// Do not respond to non-fe users and login attempts
-		if('getUserFE' != $this->mode || 'login' == $this->login['status']) {
+		if ('getUserFE' != $this->mode || 'login' == $this->login['status']) {
 			return FALSE;
 		}
 
@@ -92,7 +95,9 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 
 	/**
 	 * Authenticate a user
-	 * Return 200 if the IP is right. This means that no more checks are needed. Otherwise authentication may fail because we may don't have a password.
+	 * Return 200 if the IP is right.
+	 * This means that no more checks are needed.
+	 * Otherwise authentication may fail because we may don't have a password.
 	 *
 	 * @param array Data of user.
 	 * @return bool
@@ -104,7 +109,7 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 		$authCode = 100;
 
 		// Do not respond to non-fe users and login attempts
-		if('FE' != $this->authInfo['loginType'] || 'login' == $this->login['status']) {
+		if ('FE' != $this->authInfo['loginType'] || 'login' == $this->login['status']) {
 			return $authCode;
 		}
 		if (!isset($user['uid'])) {
@@ -132,7 +137,7 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 	 */
 	public function getGroups($user, $knownGroups) {
 		// Do not respond to non-FE group calls
-		if('getGroupsFE' != $this->mode) {
+		if ('getGroupsFE' != $this->mode) {
 			return $knownGroups;
 		}
 
@@ -191,33 +196,32 @@ class Tx_AoeIpauth_Typo3_Service_Authentication extends tx_sv_authbase {
 	}
 
 	/**
-	 * @return Tx_AoeIpauth_Domain_Service_FeEntityService
+	 * @return \AOE\AoeIpauth\Domain\Service\FeEntityService
 	 */
 	protected function getFeEntityService() {
 		if (NULL === $this->feEntityService) {
-			$this->feEntityService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_FeEntityService');
+			$this->feEntityService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
 		}
 		return $this->feEntityService;
 	}
 
 	/**
-	 * @return Tx_AoeIpauth_Domain_Service_IpService
+	 * @return \AOE\AoeIpauth\Domain\Service\IpService
 	 */
 	protected function getIpService() {
 		if (NULL === $this->ipService) {
-			$this->ipService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_IpService');
+			$this->ipService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Domain\\Service\\IpService');
 		}
 		return $this->ipService;
 	}
 
 	/**
-	 * @return Tx_AoeIpauth_Service_IpMatchingService
+	 * @return \AOE\AoeIpauth\Service\IpMatchingService
 	 */
 	protected function getIpMatchingService() {
 		if (NULL === $this->ipMatchingService) {
-			$this->ipMatchingService = t3lib_div::makeInstance('Tx_AoeIpauth_Service_IpMatchingService');
+			$this->ipMatchingService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Service\\IpMatchingService');
 		}
 		return $this->ipMatchingService;
 	}
 }
-?>

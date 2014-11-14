@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Report;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,17 +25,18 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
+ * Class IpUserAuthenticationStatus
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Report
  */
-class Tx_AoeIpauth__Report_IpUserAuthenticationStatus implements tx_reports_StatusProvider {
+class IpUserAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderInterface {
 
 	/**
-	 * @var Tx_Extbase_Object_ObjectManagerInterface The object manager
+	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
 	 */
 	protected $objectManager;
 
@@ -48,14 +50,13 @@ class Tx_AoeIpauth__Report_IpUserAuthenticationStatus implements tx_reports_Stat
 	 * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
 	 */
 	public function getStatus() {
-
 		$reports = array();
 
 		// create object manager
-		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$this->objectManager = $objectManager;
+		$objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+		$this->objectManager = clone $objectManager;
 
-		$this->myIp = t3lib_div::getIndpEnv('REMOTE_ADDR');
+		$this->myIp = GeneralUtility::getIndpEnv('REMOTE_ADDR');
 
 		$this->analyseUses($reports);
 
@@ -66,25 +67,26 @@ class Tx_AoeIpauth__Report_IpUserAuthenticationStatus implements tx_reports_Stat
 	 * Analyses users
 	 *
 	 * @param array $reports
+	 * @return void
 	 */
 	protected function analyseUses(&$reports) {
-
-		/** @var Tx_AoeIpauth_Domain_Service_FeEntityService $service */
-		$service = $this->objectManager->get('Tx_AoeIpauth_Domain_Service_FeEntityService');
+		/** @var \AOE\AoeIpauth\Domain\Service\FeEntityService $service */
+		$service = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
 
 		$users = $service->findAllUsersWithIpAuthentication();
 
 		if (empty($users)) {
 			// Message that no user group has IP authentication
-			$reports[] = $this->objectManager->get('tx_reports_reports_status_Status',
+			$reports[] = $this->objectManager->get(
+				'TYPO3\\CMS\\Reports\\Status',
 				'IP User Authentication',
 				'No users with IP authentication found',
-				'No users were found anywhere that are active and have an automatic IP authentication enabled. Your current IP is: <strong>' . $this->myIp . '</strong>',
-				tx_reports_reports_status_Status::INFO
+				'No users were found anywhere that are active and have an automatic IP authentication enabled.' .
+					'Your current IP is: <strong>' . $this->myIp . '</strong>',
+				\TYPO3\CMS\Reports\Status::INFO
 			);
 		} else {
-
-			$thisUrl = urlencode(t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
+			$thisUrl = urlencode(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
 
 			$userInfo = '<br /><br /><table cellpadding="4" cellspacing="0" border="0">';
 			$userInfo .= '<thead><tr><th style="padding-bottom: 10px;">User</th><th>IP/Range</th></tr></thead>';
@@ -95,15 +97,15 @@ class Tx_AoeIpauth__Report_IpUserAuthenticationStatus implements tx_reports_Stat
 				$uid = $user['uid'];
 				$ips = implode (', ', $user['tx_aoeipauth_ip']);
 
-				$fullRecord = t3lib_BEfunc::getRecord('fe_users', $uid);
+				$fullRecord = BackendUtility::getRecord('fe_users', $uid);
 				$title = $fullRecord['username'];
 
-
-				$button = '<a title="Edit record" onclick="window.location.href=\'alt_doc.php?returnUrl=' . $thisUrl . '&amp;edit[fe_users][' . $uid . ']=edit\'; return false;" href="#">' .
+				$button = '<a title="Edit record" onclick="window.location.href=\'alt_doc.php?returnUrl=' .
+							$thisUrl . '&amp;edit[fe_users][' . $uid . ']=edit\'; return false;" href="#">' .
 							'<span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-open">&nbsp;</span>' .
-						  '</a>';
+							'</a>';
 
-				$userInfo .= '<tr><td style="padding: 0 20px 0 0;">' .  $button . $title . '</td><td>' . $ips . '</td></tr>';
+				$userInfo .= '<tr><td style="padding: 0 20px 0 0;">' . $button . $title . '</td><td>' . $ips . '</td></tr>';
 			}
 
 			$userInfo .= '</tbody>';
@@ -112,13 +114,12 @@ class Tx_AoeIpauth__Report_IpUserAuthenticationStatus implements tx_reports_Stat
 			$userInfo .= '<br /><br />Your current IP is: <strong>' . $this->myIp . '</strong>';
 
 			// Inform about the groups
-			$reports[] = $this->objectManager->get('tx_reports_reports_status_Status',
+			$reports[] = $this->objectManager->get('TYPO3\\CMS\\Reports\\Status',
 				'IP User Authentication',
 				'Some users with automatic IP authentication were found.',
 				$userInfo,
-				tx_reports_reports_status_Status::OK
+				\TYPO3\CMS\Reports\Status::OK
 			);
 		}
 	}
 }
-?>

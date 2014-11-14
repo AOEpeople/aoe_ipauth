@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,31 +25,41 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 /**
- * Test case for class Tx_AoeIpauth_Service_IpMatchingService.
+ * Class IpServiceTest
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @package TYPO3
- * @subpackage AOE IP Auth
- *
- * @author DEV <dev@aoemedia.de>
+ * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class Tx_AoeIpauth_Tests_Unit_Domain_Service_IpServiceTest extends Tx_AoeIpauth_Tests_Unit_BaseDatabaseTest {
+class IpServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_IpService
+	 * @var \AOE\AoeIpauth\Domain\Service\IpService
 	 */
 	protected $fixture;
+
+	/**
+	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+	 */
+	protected $objectManager;
 
 	/**
 	 *
 	 */
 	public function setUp() {
-		$this->fixture = $this->objectManager->get('Tx_AoeIpauth_Domain_Service_IpService');
+		$this->testExtensionsToLoad = array(
+			'typo3conf/ext/aoe_ipauth',
+		);
 		parent::setUp();
+
+		$this->fixturePath = __DIR__ . '/Fixtures/';
+
+		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+
+		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\IpService');
 	}
 
 	/**
@@ -67,7 +78,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_IpServiceTest extends Tx_AoeIpauth_
 	 * @test
 	 */
 	public function findIpsByFeGroupIdFindsCorrectIps() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
 		$ips = $this->fixture->findIpsByFeGroupId(1);
@@ -84,7 +94,6 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_IpServiceTest extends Tx_AoeIpauth_
 	 * @test
 	 */
 	public function findIpsByFeUserIdFindsCorrectIps() {
-
 		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
 		$ips = $this->fixture->findIpsByFeUserId(1);
@@ -92,6 +101,4 @@ class Tx_AoeIpauth_Tests_Unit_Domain_Service_IpServiceTest extends Tx_AoeIpauth_
 
 		$this->assertEquals($ips, $expectedIps);
 	}
-
 }
-?>

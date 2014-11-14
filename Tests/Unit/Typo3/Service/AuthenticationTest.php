@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Tests\Unit\Typo3\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,35 +25,30 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
- * Test case for class Tx_AoeIpauth_Hooks_Tcemain.
+ * Class AuthenticationTest
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @package TYPO3
- * @subpackage AOE IP Auth
- *
- * @author DEV <dev@aoemedia.de>
+ * @package AOE\AoeIpauth\Tests\Unit\Typo3\Service
  */
-class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbase_Tests_Unit_BaseTestCase {
+class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
 
 	/**
-	 * @var Tx_AoeIpauth_Typo3_Service_Authentication
+	 * @var \AOE\AoeIpauth\Typo3\Service\Authentication
 	 */
 	protected $fixture;
 
 	/**
-	 *
+	 * setUp
 	 */
 	public function setUp() {
-		$this->fixture = $this->objectManager->get('Tx_AoeIpauth_Typo3_Service_Authentication');
 		parent::setUp();
+		$this->fixture = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Typo3\\Service\\Authentication');
 	}
 
 	/**
-	 *
+	 * tearDown
 	 */
 	public function tearDown() {
 		unset($this->fixture);
@@ -118,19 +114,17 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	 * @dataProvider getUserAuthenticatesUserProvider
 	 */
 	public function getUserAuthenticatesUser($ip, $ipAuthenticatedUsers, $finalUserArray) {
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('findAllUsersByIpAuthentication'));
+		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
 
 		$stubbedFixture
 			->expects($this->any())
 			->method('findAllUsersByIpAuthentication')
 			->will($this->returnValue($ipAuthenticatedUsers));
 
-
 		$stubbedFixture->mode = 'getUserFE';
 		$stubbedFixture->authInfo = array(
 			'REMOTE_ADDR' => $ip,
 		);
-
 
 		$user = $stubbedFixture->getUser();
 
@@ -178,14 +172,12 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	 * @dataProvider getGroupsAuthenticatesGroupsProvider
 	 */
 	public function getGroupsAuthenticatesGroups($ip, $ipAuthenticatedGroups, $finalGroupArray) {
-
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('findAllGroupsByIpAuthentication'));
+		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
 
 		$stubbedFixture
 			->expects($this->any())
 			->method('findAllGroupsByIpAuthentication')
 			->will($this->returnValue($ipAuthenticatedGroups));
-
 
 		$stubbedFixture->mode = 'getGroupsFE';
 		$stubbedFixture->authInfo = array(
@@ -211,7 +203,7 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	 * @test
 	 */
 	public function authUserAuthenticatesIpWhenUserIpMatches() {
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('doesCurrentUsersIpMatch'));
+		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
 		$stubbedFixture
 			->expects($this->any())
@@ -232,7 +224,7 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 	 * @test
 	 */
 	public function authUserDoesNotAuthenticateWhenUserIpFails() {
-		$stubbedFixture = $this->getMock('Tx_AoeIpauth_Typo3_Service_Authentication', array('doesCurrentUsersIpMatch'));
+		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
 		$stubbedFixture
 			->expects($this->any())
@@ -248,6 +240,4 @@ class Tx_AoeIpauth_Tests_Unit_Typo3_Service_AuthenticationTest extends Tx_Extbas
 		$user = $stubbedFixture->authUser(array('uid' => 1));
 		$this->assertSame(100, $user);
 	}
-
 }
-?>

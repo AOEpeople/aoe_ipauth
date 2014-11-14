@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Hooks;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,27 +25,29 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Documentation\Utility\GeneralUtility;
+
 /**
+ * Class Staticfilecache
  *
- *
- * @package aoe_ipauth
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
+ * @package AOE\AoeIpauth\Hooks
  */
-class Tx_AoeIpauth_Hooks_Staticfilecache {
+class Staticfilecache {
 
 	/**
-	 * @var Tx_AoeIpauth_Domain_Service_ContentService
+	 * @var \AOE\AoeIpauth\Domain\Service\ContentService;
 	 */
 	protected $contentService = NULL;
 
 	/**
-	 * UserFunc for the tx_ncstaticfilecache to avoid caching when a tt_content element on the page has user access settings set
+	 * UserFunc for the tx_ncstaticfilecache to avoid caching
+	 * when a tt_content element on the page has user access settings set
 	 *
 	 * @param array $parameters
-	 * @param tx_ncstaticfilecache $parent
+	 * @param \tx_ncstaticfilecache $parent
+	 * @return void
 	 */
-	public function createFileInitializeVariables(array &$parameters, tx_ncstaticfilecache $parent) {
+	public function createFileInitializeVariables(array &$parameters, \tx_ncstaticfilecache $parent) {
 
 		$tsfe = $parameters['TSFE'];
 		$staticallyCachable = $parameters['staticCacheable'];
@@ -79,9 +82,8 @@ class Tx_AoeIpauth_Hooks_Staticfilecache {
 	 */
 	protected function isPageUserCustomized($pageId, $language) {
 		if (NULL === $this->contentService) {
-			$this->contentService = t3lib_div::makeInstance('Tx_AoeIpauth_Domain_Service_ContentService');
+			$this->contentService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Domain\\Service\\ContentService');
 		}
 		return $this->contentService->isPageUserCustomized($pageId, $language);
 	}
 }
-?>

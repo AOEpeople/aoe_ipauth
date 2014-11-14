@@ -12,7 +12,6 @@ CREATE TABLE fe_groups (
 	tx_aoeipauth_ip int(11) unsigned DEFAULT '0' NOT NULL,
 );
 
-
 #
 # Table structure for table 'tx_aoeipauth_domain_model_ip'
 #
@@ -31,7 +30,7 @@ CREATE TABLE tx_aoeipauth_domain_model_ip (
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	starttime int(11) unsigned DEFAULT '0' NOT NULL,
-	endtime int(11) unsigned DEFAULT '0' NOT NULL
+	endtime int(11) unsigned DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)

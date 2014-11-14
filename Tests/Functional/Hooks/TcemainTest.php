@@ -1,9 +1,10 @@
 <?php
+namespace AOE\AoeIpauth\Tests\Functional\Hooks;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 DEV <dev@aoemedia.de>, AOE media GmbH
+ *  (c) 2014 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -24,22 +25,17 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use AOE\AoeIpauth\Hooks\Tcemain;
+
 /**
- * Test case for class Tx_AoeIpauth_Hooks_Tcemain.
+ * Class TcemainTest
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- *
- * @package TYPO3
- * @subpackage AOE IP Auth
- *
- * @author DEV <dev@aoemedia.de>
+ * @package AOE\AoeIpauth\Tests\Functional\Hooks
  */
-class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_BaseTestCase {
+class TcemainTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
 
 	/**
-	 * @var Tx_AoeIpauth_Hooks_Tcemain
+	 * @var \AOE\AoeIpauth\Hooks\Tcemain
 	 */
 	protected $fixture;
 
@@ -47,14 +43,18 @@ class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_Ba
 	 *
 	 */
 	public function setUp() {
-		$stubFixture = $this->getMock('Tx_AoeIpauth_Hooks_Tcemain', array('addFlashMessage'));
+		$this->testExtensionsToLoad = array(
+			'typo3conf/ext/aoe_ipauth',
+		);
+		parent::setUp();
+
+		$stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Tcemain', array('addFlashMessage'));
 		$stubFixture
 			->expects($this->any())
 			->method('addFlashMessage')
 			->will($this->returnValue(NULL));
 
 		$this->fixture = $stubFixture;
-		parent::setUp();
 	}
 
 	/**
@@ -70,7 +70,8 @@ class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_Ba
 	///////////////////////////
 
 	/**
-	 * Data Provider for processDatamapPostProcessFieldArrayRejectsInvalidIps
+	 * Data Provider for
+	 * processDatamapPostProcessFieldArrayRejectsInvalidIps
 	 *
 	 * @return array
 	 */
@@ -96,9 +97,8 @@ class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_Ba
 	 * @dataProvider processDatamapPostProcessFieldArrayRejectsInvalidIpsProvider
 	 */
 	public function processDatamapPostProcessFieldArrayRejectsInvalidIps($ip) {
-
 		$status = '';
-		$table = Tx_AoeIpauth_Hooks_Tcemain::IP_TABLE;
+		$table = Tcemain::IP_TABLE;
 		$id = 0;
 		$fieldArray = array(
 			'ip' => $ip,
@@ -111,23 +111,31 @@ class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_Ba
 	}
 
 	/**
-	 * Data Provider for processDatamapPostProcessFieldArrayCorrectlySetsRangeTypeInFieldArray
+	 * Data Provider for
+	 * processDatamapPostProcessFieldArrayCorrectlySetsRangeTypeInFieldArray
 	 *
 	 * @return array
+	 *
+	 * TODO: Figure out why i cannot use the
+	 * IpMatchingService::NORMAL_IP_TYPE directly.
 	 */
 	public static function processDatamapPostProcessFieldArrayCorrectlySetsRangeTypeInFieldArrayProvider() {
 		return array(
 			'simple ip' => array(
-				'192.168.1.200', Tx_AoeIpauth_Service_IpMatchingService::NORMAL_IP_TYPE
+				// \AOE\AoeIpauth\Service\IpMatchingService::NORMAL_IP_TYPE
+				'192.168.1.200', 0
 			),
 			'ip with wildcard' => array(
-				'234.119.2.*', Tx_AoeIpauth_Service_IpMatchingService::WILDCARD_IP_TYPE
+				// \AOE\AoeIpauth\Service\IpMatchingService::WILDCARD_IP_TYPE
+				'234.119.2.*', 2
 			),
 			'dash range' => array(
-				'234.119.2.1-234.119.2.100', Tx_AoeIpauth_Service_IpMatchingService::DASHRANGE_IP_TYPE
+				// \AOE\AoeIpauth\Service\IpMatchingService::DASHRANGE_IP_TYPE
+				'234.119.2.1-234.119.2.100', 3
 			),
 			'cidr' => array(
-				'234.119.2.1/20', Tx_AoeIpauth_Service_IpMatchingService::CIDR_IP_TYPE
+				// \AOE\AoeIpauth\Service\IpMatchingService::CIDR_IP_TYPE
+				'234.119.2.1/20', 1
 			),
 		);
 	}
@@ -137,9 +145,8 @@ class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_Ba
 	 * @dataProvider processDatamapPostProcessFieldArrayCorrectlySetsRangeTypeInFieldArrayProvider
 	 */
 	public function processDatamapPostProcessFieldArrayCorrectlySetsRangeTypeInFieldArray($ip, $expected) {
-
 		$status = '';
-		$table = Tx_AoeIpauth_Hooks_Tcemain::IP_TABLE;
+		$table = Tcemain::IP_TABLE;
 		$id = 0;
 		$fieldArray = array(
 			'ip' => $ip,
@@ -155,4 +162,3 @@ class Tx_AoeIpauth_Tests_Unit_Hooks_TcemainTest extends Tx_Extbase_Tests_Unit_Ba
 		$this->assertSame($expectedFieldArray, $fieldArray);
 	}
 }
-?>
