@@ -19,7 +19,7 @@ if ('BE' === TYPO3_MODE) {
 	$GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_fetchUserIfNoSession'] =
 		isset($_EXTCONF['fetchFeUserIfNoSession']) ? $_EXTCONF['fetchFeUserIfNoSession'] : 1;
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['nc_staticfilecache/class.tx_ncstaticfilecache.php']['createFile_initializeVariables'][$_EXTKEY] =
-		'EXT:' . $_EXTKEY . '/Classes/Hooks/Staticfilecache.php:Tx_AoeIpauth_Hooks_Staticfilecache->createFileInitializeVariables';
+		'\AOE\AoeIpauth\Hooks\Staticfilecache->createFileInitializeVariables';
 }
 
 // IP Authentication Service
