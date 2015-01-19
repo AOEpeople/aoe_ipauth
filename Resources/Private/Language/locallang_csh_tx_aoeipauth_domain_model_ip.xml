@@ -6,7 +6,7 @@
 		<csh_table>tx_aoeipauth_domain_model_ip</csh_table>
 	</meta>
 	<data type="array">
-	<languageKey index="default" type="array">
+		<languageKey index="default" type="array">
 			<label index="ip.description"><![CDATA[
 			Enter IP or IP range. Examples:<br />
 			- Simple IP: 192.168.2.4<br />

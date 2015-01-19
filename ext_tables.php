@@ -13,7 +13,7 @@ if (!defined('TYPO3_MODE')) {
 $TCA['tx_aoeipauth_domain_model_ip'] = array(
 	'ctrl' => array(
 		'title'	=> 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_db.xml:tx_aoeipauth_domain_model_ip',
-		'label' => 'ip',
+		'label' => 'description',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',

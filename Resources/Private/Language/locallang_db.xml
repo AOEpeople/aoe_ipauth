@@ -9,6 +9,7 @@
 			<label index="tx_aoeipauth_domain_model_ip">IP</label>
 			<label index="tx_aoeipauth_domain_model_ip.hidden">Disable</label>
 			<label index="tx_aoeipauth_domain_model_ip.ip">IP/IP Range</label>
+			<label index="tx_aoeipauth_domain_model_ip.description">Description</label>
 
 			<label index="fe_users.tx_aoeipauth_ip">Auto-Login User when coming from following IP/range</label>
 
