@@ -6,10 +6,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_aoeipauth_domain_model_ip'] = array(
 	'ctrl' => $TCA['tx_aoeipauth_domain_model_ip']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'hidden, ip',
+		'showRecordFieldList' => 'hidden, ip, description',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'hidden;;1, ip'),
+		'1' => array('showitem' => 'hidden;;1, ip, description'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -59,6 +59,15 @@ $TCA['tx_aoeipauth_domain_model_ip'] = array(
 				'type' => 'input',
 				'size' => 60,
 				'eval' => 'trim,required'
+			),
+		),
+		'description' => array(
+			'exclude' => 0,
+			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xml:tx_aoeipauth_domain_model_ip.description',
+			'config' => array(
+				'type' => 'input',
+				'size' => 120,
+				'eval' => 'required'
 			),
 		),
 		'fe_user' => array(

@@ -23,6 +23,7 @@ CREATE TABLE tx_aoeipauth_domain_model_ip (
 	fe_group int(11) unsigned DEFAULT '0' NOT NULL,
 	ip varchar(255) DEFAULT '' NOT NULL,
 	range_type tinyint(4) unsigned DEFAULT '0' NOT NULL,
+	description varchar(255) DEFAULT '' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
