@@ -1,0 +1,17 @@
+{
+  "name": "aoepeople/aoe_ipauth",
+  "description": "Authenticates users based on IP address settings",
+  "type": "typo3-cms-extension",
+  "keywords": ["TYPO3 CMS", "Authentication"],
+  "homepage": "https://github.com/AOEpeople/aoe_ipauth",
+  "version": "1.0.dev",
+  "support": {
+    "issues": "https://github.com/AOEpeople/aoe_ipauth/issues"
+  },
+  "require": {
+      "typo3/cms": ">=6.2.1,<8.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.8.0"
+  }
+}
