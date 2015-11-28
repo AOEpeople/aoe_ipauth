@@ -6,6 +6,7 @@
 		<title>Valid IP Auth Group</title>
 		<description>Valid IP Auth Group</description>
 		<subgroup></subgroup>
+		<TSconfig></TSconfig>
 		<deleted>0</deleted>
 		<hidden>0</hidden>
 		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
@@ -18,6 +19,7 @@
 		<title>Hidden IP Auth Group</title>
 		<description>Hidden IP Auth Group</description>
 		<subgroup></subgroup>
+		<TSconfig></TSconfig>
 		<deleted>0</deleted>
 		<hidden>1</hidden>
 		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
@@ -28,6 +30,7 @@
 		<title>Deleted IP Auth Group</title>
 		<description>Deleted IP Auth Group</description>
 		<subgroup></subgroup>
+		<TSconfig></TSconfig>
 		<deleted>1</deleted>
 		<hidden>0</hidden>
 		<tx_aoeipauth_ip>1</tx_aoeipauth_ip>
