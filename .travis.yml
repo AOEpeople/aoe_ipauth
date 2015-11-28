@@ -63,7 +63,7 @@ script:
   - >
     echo;
     echo "Running xmllint (Xliff)";
-    find Resources/Private/Language/ -name '*.xml' -type f | xargs xmllint --noout --schema Misc/Validation/Xliff.xsd
+    find Resources/Private/Language/ -name '*.xlf' -type f | xargs xmllint --noout --schema Misc/Validation/Xliff.xsd
   - >
     echo;
     echo "Running php lint";
