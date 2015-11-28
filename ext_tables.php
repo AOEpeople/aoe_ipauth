@@ -7,17 +7,17 @@ if (!defined('TYPO3_MODE')) {
 // IP
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
 	'tx_aoeipauth_domain_model_ip',
-	'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_tx_aoeipauth_domain_model_ip.xml'
+	'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_tx_aoeipauth_domain_model_ip.xlf'
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
 	'fe_users',
-	'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_fe_users.xml'
+	'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_fe_users.xlf'
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
 	'fe_groups',
-	'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_fe_groups.xml'
+	'EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_csh_fe_groups.xlf'
 );
 
 if ('BE' === TYPO3_MODE) {

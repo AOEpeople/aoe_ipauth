@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version='1.2'>
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-10-21T14:43:57Z" product-name="aoe_ipauth">
+		<header/>
+		<body>
+			<trans-unit id="tx_aoeipauth_ip.description">
+				<source>Allows you to add multiple IP records and enter specific IPs and IP Ranges. If a user visits the TYPO3 frontend from an IP inside this range, he/she will be automatically authorized.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

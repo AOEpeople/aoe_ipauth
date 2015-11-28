@@ -28,7 +28,7 @@ defined('TYPO3_MODE') or die();
 // Add IP Options to fe_users table
 $tempColumns = array(
 	'tx_aoeipauth_ip' => array(
-		'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xml:fe_users.tx_aoeipauth_ip',
+		'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:fe_users.tx_aoeipauth_ip',
 		'exclude' => 1,
 		'config' => Array (
 			'type' => 'inline',
