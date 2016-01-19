@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version='1.2'>
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-10-21T14:43:57Z" product-name="aoe_ipauth">
+		<header/>
+		<body>
+			<trans-unit id="ip.description">
+				<source><![CDATA[
+			Enter IP or IP range. Examples:<br />
+			- Simple IP: 192.168.2.4<br />
+			- Wildcard IP: 192.168.2.*<br />
+			- IP Range: 192.168.2.4-192.168.2.10<br />
+			- CIDR Range: 192.168.2.0/24
+			]]></source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

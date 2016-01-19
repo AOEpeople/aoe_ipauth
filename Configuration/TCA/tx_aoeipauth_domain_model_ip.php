@@ -27,7 +27,7 @@ defined('TYPO3_MODE') or die();
 
 $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
 	'ctrl' => array(
-		'title'	=> 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xml:tx_aoeipauth_domain_model_ip',
+		'title'	=> 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:tx_aoeipauth_domain_model_ip',
 		'label' => 'description',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
@@ -55,7 +55,7 @@ $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
 	'columns' => array(
 		'hidden' => array(
 			'exclude' => 1,
-			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xml:tx_aoeipauth_domain_model_ip.hidden',
+			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:tx_aoeipauth_domain_model_ip.hidden',
 			'config' => array(
 				'type' => 'check',
 			),
@@ -92,7 +92,7 @@ $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
 		),
 		'ip' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xml:tx_aoeipauth_domain_model_ip.ip',
+			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:tx_aoeipauth_domain_model_ip.ip',
 			'config' => array(
 				'type' => 'input',
 				'size' => 60,
@@ -101,7 +101,7 @@ $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
 		),
 		'description' => array(
 			'exclude' => 0,
-			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xml:tx_aoeipauth_domain_model_ip.description',
+			'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:tx_aoeipauth_domain_model_ip.description',
 			'config' => array(
 				'type' => 'input',
 				'size' => 120,
