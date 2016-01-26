@@ -10,7 +10,7 @@
     "issues": "https://github.com/AOEpeople/aoe_ipauth/issues"
   },
   "require": {
-      "typo3/cms": ">=6.2.1,<8.0"
+      "typo3/cms-core": ">=6.2.1,<8.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.8.0"
@@ -24,7 +24,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "AOE\\AoeIpauth\\": "Classes",
+      "AOE\\AoeIpauth\\": "Classes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AOE\\AoeIPauth\\Tests\\": "Tests",
       "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
     }
   },
