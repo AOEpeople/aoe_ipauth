@@ -65,7 +65,9 @@ class Authentication extends \TYPO3\CMS\Sv\AbstractAuthenticationService {
 			if (empty($GLOBALS['TSFE']->sys_page)) {
 				$GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
 			}
-			$GLOBALS['TSFE']->getCompressedTCarray();
+			if (version_compare(TYPO3_version, '7.0.0', '<')) {
+				$GLOBALS['TSFE']->getCompressedTCarray();
+			}
 		}
 	}
 

@@ -37,6 +37,6 @@ if ('BE' === TYPO3_MODE) {
 		'os' => '',
 		'exec' => '',
 		'classFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Classes/Typo3/Service/Authentication.php',
-		'className' => '\AOE\AoeIpauth\Typo3\Service\Authentication',
+		'className' => 'AOE\AoeIpauth\Typo3\Service\Authentication',
 	)
 );
