@@ -33,48 +33,52 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Unit\Utility
  */
-class EnableFieldsUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
+class EnableFieldsUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+{
 
-	/**
-	 * @test
-	 * @dataProvider enableFieldsUtilityReturnsRespectedEnableFieldsForTableDataProvider
-	 */
-	public function enableFieldsUtilityReturnsRespectedEnableFieldsForTable($expected, $table) {
-		$this->assertSame($expected, EnableFieldsUtility::enableFields($table));
-	}
+    /**
+     * @test
+     * @dataProvider enableFieldsUtilityReturnsRespectedEnableFieldsForTableDataProvider
+     */
+    public function enableFieldsUtilityReturnsRespectedEnableFieldsForTable($expected, $table)
+    {
+        $this->assertSame($expected, EnableFieldsUtility::enableFields($table));
+    }
 
-	/**
-	 * Data Provider for
-	 * enableFieldsUtilityReturnsRespectedEnableFieldsOnTableInput
-	 *
-	 * @return array
-	 */
-	public static function enableFieldsUtilityReturnsRespectedEnableFieldsForTableDataProvider() {
-		return array(
-			'Table: fe_groups' => array(
-				' AND hidden = 0 AND deleted = 0 ',
-				'fe_groups'
-			),
-			'Table: fe_users' => array(
-				' AND disable = 0 AND deleted = 0 ',
-				'fe_users'
-			),
-			'Table: tt_content' => array(
-				' AND hidden = 0 AND deleted = 0 ',
-				'tt_content'
-			),
-			'Table: tx_aoeipauth_domain_model_ip' => array(
-				' AND hidden = 0 AND deleted = 0 ',
-				'tx_aoeipauth_domain_model_ip'
-			)
-		);
-	}
+    /**
+     * Data Provider for
+     * enableFieldsUtilityReturnsRespectedEnableFieldsOnTableInput
+     *
+     * @return array
+     */
+    public static function enableFieldsUtilityReturnsRespectedEnableFieldsForTableDataProvider()
+    {
+        return array(
+            'Table: fe_groups' => array(
+                ' AND hidden = 0 AND deleted = 0 ',
+                'fe_groups'
+            ),
+            'Table: fe_users' => array(
+                ' AND disable = 0 AND deleted = 0 ',
+                'fe_users'
+            ),
+            'Table: tt_content' => array(
+                ' AND hidden = 0 AND deleted = 0 ',
+                'tt_content'
+            ),
+            'Table: tx_aoeipauth_domain_model_ip' => array(
+                ' AND hidden = 0 AND deleted = 0 ',
+                'tx_aoeipauth_domain_model_ip'
+            )
+        );
+    }
 
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function enableFieldsUtilityThrowsException() {
-		EnableFieldsUtility::enableFields('UnknownTable');
-	}
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function enableFieldsUtilityThrowsException()
+    {
+        EnableFieldsUtility::enableFields('UnknownTable');
+    }
 }

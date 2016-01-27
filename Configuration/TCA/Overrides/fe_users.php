@@ -27,34 +27,34 @@ defined('TYPO3_MODE') or die();
 
 // Add IP Options to fe_users table
 $tempColumns = array(
-	'tx_aoeipauth_ip' => array(
-		'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:fe_users.tx_aoeipauth_ip',
-		'exclude' => 1,
-		'config' => Array (
-			'type' => 'inline',
-			'foreign_table' => 'tx_aoeipauth_domain_model_ip',
-			'foreign_field' => 'fe_user',
-			'maxitems' => 9999,
-			'appearance' => array(
-				'collapse' => 1,
-				'levelLinksPosition' => 'top',
-				'showSynchronizationLink' => 0,
-				'showPossibleLocalizationRecords' => 0,
-				'showAllLocalizationLink' => 0
-			),
-		),
-	),
+    'tx_aoeipauth_ip' => array(
+        'label' => 'LLL:EXT:aoe_ipauth/Resources/Private/Language/locallang_db.xlf:fe_users.tx_aoeipauth_ip',
+        'exclude' => 1,
+        'config' => array(
+            'type' => 'inline',
+            'foreign_table' => 'tx_aoeipauth_domain_model_ip',
+            'foreign_field' => 'fe_user',
+            'maxitems' => 9999,
+            'appearance' => array(
+                'collapse' => 1,
+                'levelLinksPosition' => 'top',
+                'showSynchronizationLink' => 0,
+                'showPossibleLocalizationRecords' => 0,
+                'showAllLocalizationLink' => 0
+            ),
+        ),
+    ),
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-	'fe_users',
-	$tempColumns,
-	TRUE
+    'fe_users',
+    $tempColumns,
+    true
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-	'fe_users',
-	'tx_aoeipauth_ip;;;;1-1-1',
-	'',
-	'after:lockToDomain'
+    'fe_users',
+    'tx_aoeipauth_ip;;;;1-1-1',
+    '',
+    'after:lockToDomain'
 );
 
 unset($tempColumns);

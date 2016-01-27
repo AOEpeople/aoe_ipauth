@@ -33,93 +33,96 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Report
  */
-class IpUserAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderInterface {
+class IpUserAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderInterface
+{
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 */
-	protected $objectManager;
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
 
-	/**
-	 * @var string
-	 */
-	protected $myIp;
+    /**
+     * @var string
+     */
+    protected $myIp;
 
-	/**
-	 *
-	 * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
-	 */
-	public function getStatus() {
-		$reports = array();
+    /**
+     *
+     * @see typo3/sysext/reports/interfaces/tx_reports_StatusProvider::getStatus()
+     */
+    public function getStatus()
+    {
+        $reports = array();
 
-		// create object manager
-		$objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-		$this->objectManager = clone $objectManager;
+        // create object manager
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->objectManager = clone $objectManager;
 
-		$this->myIp = GeneralUtility::getIndpEnv('REMOTE_ADDR');
+        $this->myIp = GeneralUtility::getIndpEnv('REMOTE_ADDR');
 
-		$this->analyseUses($reports);
+        $this->analyseUses($reports);
 
-		return $reports;
-	}
+        return $reports;
+    }
 
-	/**
-	 * Analyses users
-	 *
-	 * @param array $reports
-	 * @return void
-	 */
-	protected function analyseUses(&$reports) {
-		/** @var \AOE\AoeIpauth\Domain\Service\FeEntityService $service */
-		$service = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
+    /**
+     * Analyses users
+     *
+     * @param array $reports
+     * @return void
+     */
+    protected function analyseUses(&$reports)
+    {
+        /** @var \AOE\AoeIpauth\Domain\Service\FeEntityService $service */
+        $service = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
 
-		$users = $service->findAllUsersWithIpAuthentication();
+        $users = $service->findAllUsersWithIpAuthentication();
 
-		if (empty($users)) {
-			// Message that no user group has IP authentication
-			$reports[] = $this->objectManager->get(
-				'TYPO3\\CMS\\Reports\\Status',
-				'IP User Authentication',
-				'No users with IP authentication found',
-				'No users were found anywhere that are active and have an automatic IP authentication enabled.' .
-					'Your current IP is: <strong>' . $this->myIp . '</strong>',
-				\TYPO3\CMS\Reports\Status::INFO
-			);
-		} else {
-			$thisUrl = urlencode(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
+        if (empty($users)) {
+            // Message that no user group has IP authentication
+            $reports[] = $this->objectManager->get(
+                'TYPO3\\CMS\\Reports\\Status',
+                'IP User Authentication',
+                'No users with IP authentication found',
+                'No users were found anywhere that are active and have an automatic IP authentication enabled.' .
+                    'Your current IP is: <strong>' . $this->myIp . '</strong>',
+                \TYPO3\CMS\Reports\Status::INFO
+            );
+        } else {
+            $thisUrl = urlencode(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
 
-			$userInfo = '<br /><br /><table cellpadding="4" cellspacing="0" border="0">';
-			$userInfo .= '<thead><tr><th style="padding-bottom: 10px;">User</th><th>IP/Range</th></tr></thead>';
-			$userInfo .= '<tbody>';
+            $userInfo = '<br /><br /><table cellpadding="4" cellspacing="0" border="0">';
+            $userInfo .= '<thead><tr><th style="padding-bottom: 10px;">User</th><th>IP/Range</th></tr></thead>';
+            $userInfo .= '<tbody>';
 
-			// Add user group strings
-			foreach ($users as $user) {
-				$uid = $user['uid'];
-				$ips = implode (', ', $user['tx_aoeipauth_ip']);
+            // Add user group strings
+            foreach ($users as $user) {
+                $uid = $user['uid'];
+                $ips = implode(', ', $user['tx_aoeipauth_ip']);
 
-				$fullRecord = BackendUtility::getRecord('fe_users', $uid);
-				$title = $fullRecord['username'];
+                $fullRecord = BackendUtility::getRecord('fe_users', $uid);
+                $title = $fullRecord['username'];
 
-				$button = '<a title="Edit record" onclick="window.location.href=\'alt_doc.php?returnUrl=' .
-							$thisUrl . '&amp;edit[fe_users][' . $uid . ']=edit\'; return false;" href="#">' .
-							'<span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-open">&nbsp;</span>' .
-							'</a>';
+                $button = '<a title="Edit record" onclick="window.location.href=\'alt_doc.php?returnUrl=' .
+                            $thisUrl . '&amp;edit[fe_users][' . $uid . ']=edit\'; return false;" href="#">' .
+                            '<span class="t3-icon t3-icon-actions t3-icon-actions-document t3-icon-document-open">&nbsp;</span>' .
+                            '</a>';
 
-				$userInfo .= '<tr><td style="padding: 0 20px 0 0;">' . $button . $title . '</td><td>' . $ips . '</td></tr>';
-			}
+                $userInfo .= '<tr><td style="padding: 0 20px 0 0;">' . $button . $title . '</td><td>' . $ips . '</td></tr>';
+            }
 
-			$userInfo .= '</tbody>';
-			$userInfo .= '</table>';
+            $userInfo .= '</tbody>';
+            $userInfo .= '</table>';
 
-			$userInfo .= '<br /><br />Your current IP is: <strong>' . $this->myIp . '</strong>';
+            $userInfo .= '<br /><br />Your current IP is: <strong>' . $this->myIp . '</strong>';
 
-			// Inform about the groups
-			$reports[] = $this->objectManager->get('TYPO3\\CMS\\Reports\\Status',
-				'IP User Authentication',
-				'Some users with automatic IP authentication were found.',
-				$userInfo,
-				\TYPO3\CMS\Reports\Status::OK
-			);
-		}
-	}
+            // Inform about the groups
+            $reports[] = $this->objectManager->get('TYPO3\\CMS\\Reports\\Status',
+                'IP User Authentication',
+                'Some users with automatic IP authentication were found.',
+                $userInfo,
+                \TYPO3\CMS\Reports\Status::OK
+            );
+        }
+    }
 }

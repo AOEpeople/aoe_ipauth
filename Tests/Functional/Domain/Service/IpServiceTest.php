@@ -27,78 +27,82 @@ namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 /**
  * Class IpServiceTest
  *
  * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class IpServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
+class IpServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+{
 
-	/**
-	 * @var \AOE\AoeIpauth\Domain\Service\IpService
-	 */
-	protected $fixture;
+    /**
+     * @var \AOE\AoeIpauth\Domain\Service\IpService
+     */
+    protected $fixture;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 */
-	protected $objectManager;
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
 
-	/**
-	 *
-	 */
-	public function setUp() {
-		$this->testExtensionsToLoad = array(
-			'typo3conf/ext/aoe_ipauth',
-		);
-		parent::setUp();
+    /**
+     *
+     */
+    public function setUp()
+    {
+        $this->testExtensionsToLoad = array(
+            'typo3conf/ext/aoe_ipauth',
+        );
+        parent::setUp();
 
-		$this->fixturePath = __DIR__ . '/Fixtures/';
+        $this->fixturePath = __DIR__ . '/Fixtures/';
 
-		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        /** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 
-		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\IpService');
-	}
+        $this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\IpService');
+    }
 
-	/**
-	 *
-	 */
-	public function tearDown() {
-		unset($this->fixture);
-		parent::tearDown();
-	}
+    /**
+     *
+     */
+    public function tearDown()
+    {
+        unset($this->fixture);
+        parent::tearDown();
+    }
 
-	///////////////////////////
-	// Tests concerning findIpsByFeGroupId
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findIpsByFeGroupId
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function findIpsByFeGroupIdFindsCorrectIps() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
+    /**
+     * @test
+     */
+    public function findIpsByFeGroupIdFindsCorrectIps()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
-		$ips = $this->fixture->findIpsByFeGroupId(1);
-		$expectedIps = array('1.2.3.4');
+        $ips = $this->fixture->findIpsByFeGroupId(1);
+        $expectedIps = array('1.2.3.4');
 
-		$this->assertEquals($ips, $expectedIps);
-	}
+        $this->assertEquals($ips, $expectedIps);
+    }
 
-	///////////////////////////
-	// Tests concerning findIpsByFeUserId
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findIpsByFeUserId
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function findIpsByFeUserIdFindsCorrectIps() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
+    /**
+     * @test
+     */
+    public function findIpsByFeUserIdFindsCorrectIps()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
-		$ips = $this->fixture->findIpsByFeUserId(1);
-		$expectedIps = array('5.6.7.8');
+        $ips = $this->fixture->findIpsByFeUserId(1);
+        $expectedIps = array('5.6.7.8');
 
-		$this->assertEquals($ips, $expectedIps);
-	}
+        $this->assertEquals($ips, $expectedIps);
+    }
 }

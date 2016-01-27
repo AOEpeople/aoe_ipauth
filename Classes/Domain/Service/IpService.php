@@ -33,48 +33,52 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Domain\Service
  */
-class IpService implements  \TYPO3\CMS\Core\SingletonInterface {
+class IpService implements  \TYPO3\CMS\Core\SingletonInterface
+{
 
-	const TABLE = 'tx_aoeipauth_domain_model_ip';
+    const TABLE = 'tx_aoeipauth_domain_model_ip';
 
-	/**
-	 * Returns all ip domain model records that belong to a given fe_user uid
-	 *
-	 * @param int $uid fe_users uid
-	 * @return array
-	 */
-	public function findIpsByFeUserId($uid) {
-		return $this->findIpsByField('fe_user', $uid);
-	}
+    /**
+     * Returns all ip domain model records that belong to a given fe_user uid
+     *
+     * @param int $uid fe_users uid
+     * @return array
+     */
+    public function findIpsByFeUserId($uid)
+    {
+        return $this->findIpsByField('fe_user', $uid);
+    }
 
-	/**
-	 * Returns all ip domain model records that belong to a given fe_groups uid
-	 *
-	 * @param int $uid fe_groups uid
-	 * @return array
-	 */
-	public function findIpsByFeGroupId($uid) {
-		return $this->findIpsByField('fe_group', $uid);
-	}
+    /**
+     * Returns all ip domain model records that belong to a given fe_groups uid
+     *
+     * @param int $uid fe_groups uid
+     * @return array
+     */
+    public function findIpsByFeGroupId($uid)
+    {
+        return $this->findIpsByField('fe_group', $uid);
+    }
 
-	/**
-	 * Finds IPs from the table by a given field and field value
-	 *
-	 * @param string $field
-	 * @param int $value
-	 * @return array
-	 */
-	protected function findIpsByField($field, $value) {
-		$enableFields = EnableFieldsUtility::enableFields(self::TABLE);
-		$ips = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('ip', self::TABLE, $field . ' = ' . intval($value) . ' ' . $enableFields);
-		if (empty($ips)) {
-			return array();
-		}
-		$finalIps = array();
-		foreach ($ips as $record) {
-			$finalIps[] = $record['ip'];
-		}
+    /**
+     * Finds IPs from the table by a given field and field value
+     *
+     * @param string $field
+     * @param int $value
+     * @return array
+     */
+    protected function findIpsByField($field, $value)
+    {
+        $enableFields = EnableFieldsUtility::enableFields(self::TABLE);
+        $ips = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('ip', self::TABLE, $field . ' = ' . intval($value) . ' ' . $enableFields);
+        if (empty($ips)) {
+            return array();
+        }
+        $finalIps = array();
+        foreach ($ips as $record) {
+            $finalIps[] = $record['ip'];
+        }
 
-		return $finalIps;
-	}
+        return $finalIps;
+    }
 }

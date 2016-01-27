@@ -30,25 +30,27 @@ namespace AOE\AoeIpauth\Utility;
  *
  * @package AOE\AoeIpauth\Utility
  */
-class EnableFieldsUtility {
+class EnableFieldsUtility
+{
 
-	/**
-	 * @param string $table
-	 * @return string
-	 * @throws \InvalidArgumentException
-	 */
-	public static function enableFields($table) {
-		$enableFields = array(
-			'fe_groups' => ' AND hidden = 0 AND deleted = 0 ',
-			'fe_users' => ' AND disable = 0 AND deleted = 0 ',
-			'tt_content' => ' AND hidden = 0 AND deleted = 0 ',
-			'tx_aoeipauth_domain_model_ip' => ' AND hidden = 0 AND deleted = 0 '
-		);
+    /**
+     * @param string $table
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public static function enableFields($table)
+    {
+        $enableFields = array(
+            'fe_groups' => ' AND hidden = 0 AND deleted = 0 ',
+            'fe_users' => ' AND disable = 0 AND deleted = 0 ',
+            'tt_content' => ' AND hidden = 0 AND deleted = 0 ',
+            'tx_aoeipauth_domain_model_ip' => ' AND hidden = 0 AND deleted = 0 '
+        );
 
-		if (!isset($enableFields[$table])) {
-			throw new \InvalidArgumentException('Table: ' . $table . 'is not supported in this function');
-		}
+        if (!isset($enableFields[$table])) {
+            throw new \InvalidArgumentException('Table: ' . $table . 'is not supported in this function');
+        }
 
-		return $enableFields[$table];
-	}
+        return $enableFields[$table];
+    }
 }

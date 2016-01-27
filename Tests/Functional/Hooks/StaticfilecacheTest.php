@@ -32,173 +32,180 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Functional\Hooks
  */
-class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
+class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+{
 
-	/**
-	 * @var \AOE\AoeIpauth\Hooks\Staticfilecache
-	 */
-	protected $fixture;
+    /**
+     * @var \AOE\AoeIpauth\Hooks\Staticfilecache
+     */
+    protected $fixture;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 */
-	protected $objectManager;
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
 
-	/**
-	 *
-	 */
-	public function setUp() {
-		$this->testExtensionsToLoad = array(
-			'typo3conf/ext/aoe_ipauth',
-		);
-		parent::setUp();
+    /**
+     *
+     */
+    public function setUp()
+    {
+        $this->testExtensionsToLoad = array(
+            'typo3conf/ext/aoe_ipauth',
+        );
+        parent::setUp();
 
-		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        /** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 
-		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Hooks\\Staticfilecache');
-	}
+        $this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Hooks\\Staticfilecache');
+    }
 
-	/**
-	 *
-	 */
-	public function tearDown() {
-		unset($this->fixture);
-		parent::tearDown();
-	}
+    /**
+     *
+     */
+    public function tearDown()
+    {
+        unset($this->fixture);
+        parent::tearDown();
+    }
 
-	///////////////////////////
-	// Tests concerning createFileInitializeVariables
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning createFileInitializeVariables
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function createFileInitializeVariablesDeniesCachingForUserCustomizedPages() {
-		$tsfe = new \stdClass();
-		$tsfe->tmpl = new \stdClass();
-		$tsfe->tmpl->setup = array(
-			'config.' => array(
-				'aoe_ipauth.' => array(
-					'staticAwareness' => 1,
-				)
-			)
-		);
+    /**
+     * @test
+     */
+    public function createFileInitializeVariablesDeniesCachingForUserCustomizedPages()
+    {
+        $tsfe = new \stdClass();
+        $tsfe->tmpl = new \stdClass();
+        $tsfe->tmpl->setup = array(
+            'config.' => array(
+                'aoe_ipauth.' => array(
+                    'staticAwareness' => 1,
+                )
+            )
+        );
 
-		$ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getMock('tx_ncstaticfilecache');
 
-		$stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
-		$stubFixture
-			->expects($this->any())
-			->method('isPageUserCustomized')
-			->will($this->returnValue(TRUE));
+        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture
+            ->expects($this->any())
+            ->method('isPageUserCustomized')
+            ->will($this->returnValue(true));
 
-		$parameters = array(
-			'TSFE' => $tsfe,
-			'staticCacheable' => TRUE
-		);
+        $parameters = array(
+            'TSFE' => $tsfe,
+            'staticCacheable' => true
+        );
 
-		$stubFixture->createFileInitializeVariables($parameters, $ncFixture);
+        $stubFixture->createFileInitializeVariables($parameters, $ncFixture);
 
-		$this->assertFalse($parameters['staticCacheable']);
-	}
+        $this->assertFalse($parameters['staticCacheable']);
+    }
 
-	/**
-	 * @test
-	 */
-	public function createFileInitializeVariablesAllowsCachingForUncustomizedPages() {
-		// No static awareness enabled
-		$tsfe = new \stdClass();
-		$tsfe->tmpl = new \stdClass();
-		$tsfe->tmpl->setup = array(
-			'config.' => array(
-				'aoe_ipauth.' => array(
-					'staticAwareness' => 1,
-				)
-			)
-		);
+    /**
+     * @test
+     */
+    public function createFileInitializeVariablesAllowsCachingForUncustomizedPages()
+    {
+        // No static awareness enabled
+        $tsfe = new \stdClass();
+        $tsfe->tmpl = new \stdClass();
+        $tsfe->tmpl->setup = array(
+            'config.' => array(
+                'aoe_ipauth.' => array(
+                    'staticAwareness' => 1,
+                )
+            )
+        );
 
-		$ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getMock('tx_ncstaticfilecache');
 
-		$stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
-		$stubFixture
-			->expects($this->any())
-			->method('isPageUserCustomized')
-			->will($this->returnValue(FALSE));
+        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture
+            ->expects($this->any())
+            ->method('isPageUserCustomized')
+            ->will($this->returnValue(false));
 
-		$parameters = array(
-			'TSFE' => $tsfe,
-			'staticCacheable' => TRUE
-		);
+        $parameters = array(
+            'TSFE' => $tsfe,
+            'staticCacheable' => true
+        );
 
-		$stubFixture->createFileInitializeVariables($parameters, $ncFixture);
+        $stubFixture->createFileInitializeVariables($parameters, $ncFixture);
 
-		$this->assertTrue($parameters['staticCacheable']);
-	}
+        $this->assertTrue($parameters['staticCacheable']);
+    }
 
-	/**
-	 * @test
-	 */
-	public function createFileInitializeVariablesSkipsCheckIfStaticAwarenessIsDisabled() {
-		// No static awareness enabled
-		$tsfe = new \stdClass();
-		$tsfe->tmpl = new \stdClass();
-		$tsfe->tmpl->setup = array(
-			'config.' => array(
-				'aoe_ipauth.' => array(
-					'staticAwareness' => 0,
-				)
-			)
-		);
+    /**
+     * @test
+     */
+    public function createFileInitializeVariablesSkipsCheckIfStaticAwarenessIsDisabled()
+    {
+        // No static awareness enabled
+        $tsfe = new \stdClass();
+        $tsfe->tmpl = new \stdClass();
+        $tsfe->tmpl->setup = array(
+            'config.' => array(
+                'aoe_ipauth.' => array(
+                    'staticAwareness' => 0,
+                )
+            )
+        );
 
-		$ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getMock('tx_ncstaticfilecache');
 
-		$stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
-		$stubFixture
-			->expects($this->any())
-			->method('isPageUserCustomized')
-			->will($this->returnValue(TRUE));
+        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture
+            ->expects($this->any())
+            ->method('isPageUserCustomized')
+            ->will($this->returnValue(true));
 
-		$parameters = array(
-			'TSFE' => $tsfe,
-			'staticCacheable' => TRUE
-		);
+        $parameters = array(
+            'TSFE' => $tsfe,
+            'staticCacheable' => true
+        );
 
-		$stubFixture->createFileInitializeVariables($parameters, $ncFixture);
+        $stubFixture->createFileInitializeVariables($parameters, $ncFixture);
 
-		$this->assertTrue($parameters['staticCacheable']);
-	}
+        $this->assertTrue($parameters['staticCacheable']);
+    }
 
-	/**
-	 * @test
-	 */
-	public function createFileInitializeVariablesSkipsCheckIfPageIsAlreadyNotStaticallyCachable() {
-		// No static awareness enabled
-		$tsfe = new \stdClass();
-		$tsfe->tmpl = new \stdClass();
-		$tsfe->tmpl->setup = array(
-			'config.' => array(
-				'aoe_ipauth.' => array(
-					'staticAwareness' => 1,
-				)
-			)
-		);
+    /**
+     * @test
+     */
+    public function createFileInitializeVariablesSkipsCheckIfPageIsAlreadyNotStaticallyCachable()
+    {
+        // No static awareness enabled
+        $tsfe = new \stdClass();
+        $tsfe->tmpl = new \stdClass();
+        $tsfe->tmpl->setup = array(
+            'config.' => array(
+                'aoe_ipauth.' => array(
+                    'staticAwareness' => 1,
+                )
+            )
+        );
 
-		$ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getMock('tx_ncstaticfilecache');
 
-		$stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
-		$stubFixture
-			->expects($this->any())
-			->method('isPageUserCustomized')
-			->will($this->returnValue(FALSE));
+        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture
+            ->expects($this->any())
+            ->method('isPageUserCustomized')
+            ->will($this->returnValue(false));
 
-		$parameters = array(
-			'TSFE' => $tsfe,
-			'staticCacheable' => FALSE
-		);
+        $parameters = array(
+            'TSFE' => $tsfe,
+            'staticCacheable' => false
+        );
 
-		$stubFixture->createFileInitializeVariables($parameters, $ncFixture);
+        $stubFixture->createFileInitializeVariables($parameters, $ncFixture);
 
-		$this->assertFalse($parameters['staticCacheable']);
-	}
+        $this->assertFalse($parameters['staticCacheable']);
+    }
 }

@@ -32,158 +32,167 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class ContentServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
+class ContentServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+{
 
-	/**
-	 * @var \AOE\AoeIpauth\Domain\Service\ContentService
-	 */
-	protected $fixture;
+    /**
+     * @var \AOE\AoeIpauth\Domain\Service\ContentService
+     */
+    protected $fixture;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 */
-	protected $objectManager;
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
 
-	/**
-	 * SetUp
-	 */
-	public function setUp() {
-		$this->testExtensionsToLoad = array(
-			'typo3conf/ext/aoe_ipauth',
-		);
-		parent::setUp();
+    /**
+     * SetUp
+     */
+    public function setUp()
+    {
+        $this->testExtensionsToLoad = array(
+            'typo3conf/ext/aoe_ipauth',
+        );
+        parent::setUp();
 
-		$this->fixturePath = __DIR__ . '/Fixtures/';
+        $this->fixturePath = __DIR__ . '/Fixtures/';
 
-		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\ContentService');
-	}
+        /** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\ContentService');
+    }
 
-	/**
-	 * TearDown
-	 */
-	public function tearDown() {
-		unset($this->fixture);
-		parent::tearDown();
-	}
+    /**
+     * TearDown
+     */
+    public function tearDown()
+    {
+        unset($this->fixture);
+        parent::tearDown();
+    }
 
-	///////////////////////////
-	// Tests concerning isPageUserCustomized
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning isPageUserCustomized
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function isPageUserCustomizedWorks() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
-		$language = 0;
+    /**
+     * @test
+     */
+    public function isPageUserCustomizedWorks()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
+        $language = 0;
 
-		$isCustomized = $this->fixture->isPageUserCustomized(1, $language);
-		$this->assertTrue($isCustomized);
+        $isCustomized = $this->fixture->isPageUserCustomized(1, $language);
+        $this->assertTrue($isCustomized);
 
-		$isCustomized = $this->fixture->isPageUserCustomized(2, $language);
-		$this->assertFalse($isCustomized);
+        $isCustomized = $this->fixture->isPageUserCustomized(2, $language);
+        $this->assertFalse($isCustomized);
 
-		$isCustomized = $this->fixture->isPageUserCustomized(3, $language);
-		$this->assertFalse($isCustomized);
+        $isCustomized = $this->fixture->isPageUserCustomized(3, $language);
+        $this->assertFalse($isCustomized);
 
-		$isCustomized = $this->fixture->isPageUserCustomized(4, $language);
-		$this->assertTrue($isCustomized);
-	}
+        $isCustomized = $this->fixture->isPageUserCustomized(4, $language);
+        $this->assertTrue($isCustomized);
+    }
 
-	/**
-	 * @test
-	 */
-	public function isPageUserCustomizedWorksForOverlays() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
-		$language = 2;
+    /**
+     * @test
+     */
+    public function isPageUserCustomizedWorksForOverlays()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
+        $language = 2;
 
-		$isCustomized = $this->fixture->isPageUserCustomized(1, $language);
-		$this->assertTrue($isCustomized);
+        $isCustomized = $this->fixture->isPageUserCustomized(1, $language);
+        $this->assertTrue($isCustomized);
 
-		$isCustomized = $this->fixture->isPageUserCustomized(2, $language);
-		$this->assertTrue($isCustomized);
+        $isCustomized = $this->fixture->isPageUserCustomized(2, $language);
+        $this->assertTrue($isCustomized);
 
-		$isCustomized = $this->fixture->isPageUserCustomized(3, $language);
-		$this->assertFalse($isCustomized);
+        $isCustomized = $this->fixture->isPageUserCustomized(3, $language);
+        $this->assertFalse($isCustomized);
 
-		$isCustomized = $this->fixture->isPageUserCustomized(4, $language);
-		$this->assertTrue($isCustomized);
-	}
+        $isCustomized = $this->fixture->isPageUserCustomized(4, $language);
+        $this->assertTrue($isCustomized);
+    }
 
-	///////////////////////////
-	// Tests concerning findUserCustomizedContentByPageId
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findUserCustomizedContentByPageId
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function findUserCustomizedContentByPageIdWorks() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
-		$language = 0;
+    /**
+     * @test
+     */
+    public function findUserCustomizedContentByPageIdWorks()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
+        $language = 0;
 
-		$content = $this->fixture->findUserCustomizedContentByPageId(1, $language);
-		$expectedContent = array(
-			array(
-				'uid' => 205,
-				'pid' => 1,
-			)
-		);
+        $content = $this->fixture->findUserCustomizedContentByPageId(1, $language);
+        $expectedContent = array(
+            array(
+                'uid' => 205,
+                'pid' => 1,
+            )
+        );
 
-		$this->assertEquals($content, $expectedContent);
-	}
+        $this->assertEquals($content, $expectedContent);
+    }
 
-	/**
-	 * @test
-	 */
-	public function findUserCustomizedContentByPageIdWorksForOverlays() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
-		$language = 2;
+    /**
+     * @test
+     */
+    public function findUserCustomizedContentByPageIdWorksForOverlays()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
+        $language = 2;
 
-		$content = $this->fixture->findUserCustomizedContentByPageId(1, $language);
-		$expectedContent = array(
-			array(
-				'uid' => 210,
-				'pid' => 1,
-			)
-		);
+        $content = $this->fixture->findUserCustomizedContentByPageId(1, $language);
+        $expectedContent = array(
+            array(
+                'uid' => 210,
+                'pid' => 1,
+            )
+        );
 
-		$this->assertEquals($content, $expectedContent);
-	}
+        $this->assertEquals($content, $expectedContent);
+    }
 
-	///////////////////////////
-	// Tests concerning isPageBareUserCustomized
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning isPageBareUserCustomized
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function isPageBareUserCustomizedWorks() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
-		$language = 0;
+    /**
+     * @test
+     */
+    public function isPageBareUserCustomizedWorks()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
+        $language = 0;
 
-		$isPageBareCustomized = $this->fixture->isPageBareUserCustomized(1, $language);
-		$this->assertFalse($isPageBareCustomized);
+        $isPageBareCustomized = $this->fixture->isPageBareUserCustomized(1, $language);
+        $this->assertFalse($isPageBareCustomized);
 
-		$isPageBareCustomized = $this->fixture->isPageBareUserCustomized(4, $language);
-		$this->assertTrue($isPageBareCustomized);
+        $isPageBareCustomized = $this->fixture->isPageBareUserCustomized(4, $language);
+        $this->assertTrue($isPageBareCustomized);
 
-		$isPageBareCustomized = $this->fixture->isPageBareUserCustomized(5, $language);
-		$this->assertTrue($isPageBareCustomized);
-	}
+        $isPageBareCustomized = $this->fixture->isPageBareUserCustomized(5, $language);
+        $this->assertTrue($isPageBareCustomized);
+    }
 
-	/**
-	 * @test
-	 */
-	public function isPageBareUserCustomizedWorksForOverlays() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
-		$language = 2;
+    /**
+     * @test
+     */
+    public function isPageBareUserCustomizedWorksForOverlays()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultTtContent.xml');
+        $language = 2;
 
-		$isPageBareCustomized = $this->fixture->isPageBareUserCustomized(1, $language);
-		$this->assertFalse($isPageBareCustomized);
+        $isPageBareCustomized = $this->fixture->isPageBareUserCustomized(1, $language);
+        $this->assertFalse($isPageBareCustomized);
 
-		$isPageBareCustomized = $this->fixture->isPageBareUserCustomized(5, $language);
-		$this->assertTrue($isPageBareCustomized);
-	}
+        $isPageBareCustomized = $this->fixture->isPageBareUserCustomized(5, $language);
+        $this->assertTrue($isPageBareCustomized);
+    }
 }
