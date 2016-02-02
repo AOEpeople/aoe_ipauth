@@ -32,212 +32,221 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Unit\Typo3\Service
  */
-class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase {
+class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+{
 
-	/**
-	 * @var \AOE\AoeIpauth\Typo3\Service\Authentication
-	 */
-	protected $fixture;
+    /**
+     * @var \AOE\AoeIpauth\Typo3\Service\Authentication
+     */
+    protected $fixture;
 
-	/**
-	 * setUp
-	 */
-	public function setUp() {
-		parent::setUp();
-		$this->fixture = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Typo3\\Service\\Authentication');
-	}
+    /**
+     * setUp
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->fixture = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Typo3\\Service\\Authentication');
+    }
 
-	/**
-	 * tearDown
-	 */
-	public function tearDown() {
-		unset($this->fixture);
-		parent::tearDown();
-	}
+    /**
+     * tearDown
+     */
+    public function tearDown()
+    {
+        unset($this->fixture);
+        parent::tearDown();
+    }
 
-	///////////////////////////
-	// Tests concerning getUser
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning getUser
+    ///////////////////////////
 
-	/**
-	 * Data Provider for getUserAuthenticatesUser
-	 *
-	 * @return array
-	 */
-	public static function getUserAuthenticatesUserProvider() {
-		return array(
-			'one ip authenticated user' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-					)
-				),
-				array(
-					'uid' => 1,
-					'pid' => 1,
-					'username' => 'Test User',
-				),
-			),
-			'two ip authenticated users' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-					),
-					array(
-						'uid' => 2,
-						'pid' => 1,
-						'username' => 'Test User #2',
-					)
-				),
-				array(
-					'uid' => 2,
-					'pid' => 1,
-					'username' => 'Test User #2',
-				),
-			),
-			'no ip authenticated users' => array(
-				'192.168.1.200',
-				array(),
-				FALSE,
-			),
-		);
-	}
+    /**
+     * Data Provider for getUserAuthenticatesUser
+     *
+     * @return array
+     */
+    public static function getUserAuthenticatesUserProvider()
+    {
+        return array(
+            'one ip authenticated user' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                    )
+                ),
+                array(
+                    'uid' => 1,
+                    'pid' => 1,
+                    'username' => 'Test User',
+                ),
+            ),
+            'two ip authenticated users' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                    ),
+                    array(
+                        'uid' => 2,
+                        'pid' => 1,
+                        'username' => 'Test User #2',
+                    )
+                ),
+                array(
+                    'uid' => 2,
+                    'pid' => 1,
+                    'username' => 'Test User #2',
+                ),
+            ),
+            'no ip authenticated users' => array(
+                '192.168.1.200',
+                array(),
+                false,
+            ),
+        );
+    }
 
-	/**
-	 * @test
-	 * @dataProvider getUserAuthenticatesUserProvider
-	 */
-	public function getUserAuthenticatesUser($ip, $ipAuthenticatedUsers, $finalUserArray) {
-		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
+    /**
+     * @test
+     * @dataProvider getUserAuthenticatesUserProvider
+     */
+    public function getUserAuthenticatesUser($ip, $ipAuthenticatedUsers, $finalUserArray)
+    {
+        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
 
-		$stubbedFixture
-			->expects($this->any())
-			->method('findAllUsersByIpAuthentication')
-			->will($this->returnValue($ipAuthenticatedUsers));
+        $stubbedFixture
+            ->expects($this->any())
+            ->method('findAllUsersByIpAuthentication')
+            ->will($this->returnValue($ipAuthenticatedUsers));
 
-		$stubbedFixture->mode = 'getUserFE';
-		$stubbedFixture->authInfo = array(
-			'REMOTE_ADDR' => $ip,
-		);
+        $stubbedFixture->mode = 'getUserFE';
+        $stubbedFixture->authInfo = array(
+            'REMOTE_ADDR' => $ip,
+        );
 
-		$user = $stubbedFixture->getUser();
+        $user = $stubbedFixture->getUser();
 
-		$this->assertEquals($user, $finalUserArray);
-	}
+        $this->assertEquals($user, $finalUserArray);
+    }
 
-	///////////////////////////
-	// Tests concerning getGroups
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning getGroups
+    ///////////////////////////
 
-	/**
-	 * Data Provider for getGroupsAuthenticatesGroups
-	 *
-	 * @return array
-	 */
-	public static function getGroupsAuthenticatesGroupsProvider() {
-		return array(
-			'one ip authenticated group' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				),
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					),
-					array(
-						'uid' => 10,
-						'pid' => 1,
-						'title' => 'Test Group Existing',
-					)
-				)
-			),
-		);
-	}
+    /**
+     * Data Provider for getGroupsAuthenticatesGroups
+     *
+     * @return array
+     */
+    public static function getGroupsAuthenticatesGroupsProvider()
+    {
+        return array(
+            'one ip authenticated group' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                    )
+                ),
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                    ),
+                    array(
+                        'uid' => 10,
+                        'pid' => 1,
+                        'title' => 'Test Group Existing',
+                    )
+                )
+            ),
+        );
+    }
 
-	/**
-	 * @test
-	 * @dataProvider getGroupsAuthenticatesGroupsProvider
-	 */
-	public function getGroupsAuthenticatesGroups($ip, $ipAuthenticatedGroups, $finalGroupArray) {
-		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
+    /**
+     * @test
+     * @dataProvider getGroupsAuthenticatesGroupsProvider
+     */
+    public function getGroupsAuthenticatesGroups($ip, $ipAuthenticatedGroups, $finalGroupArray)
+    {
+        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
 
-		$stubbedFixture
-			->expects($this->any())
-			->method('findAllGroupsByIpAuthentication')
-			->will($this->returnValue($ipAuthenticatedGroups));
+        $stubbedFixture
+            ->expects($this->any())
+            ->method('findAllGroupsByIpAuthentication')
+            ->will($this->returnValue($ipAuthenticatedGroups));
 
-		$stubbedFixture->mode = 'getGroupsFE';
-		$stubbedFixture->authInfo = array(
-			'REMOTE_ADDR' => $ip,
-		);
-		$existingGroups = array(
-			array(
-				'uid' => 10,
-				'pid' => 1,
-				'title' => 'Test Group Existing',
-			)
-		);
-		$groups = $stubbedFixture->getGroups('', $existingGroups);
+        $stubbedFixture->mode = 'getGroupsFE';
+        $stubbedFixture->authInfo = array(
+            'REMOTE_ADDR' => $ip,
+        );
+        $existingGroups = array(
+            array(
+                'uid' => 10,
+                'pid' => 1,
+                'title' => 'Test Group Existing',
+            )
+        );
+        $groups = $stubbedFixture->getGroups('', $existingGroups);
 
-		$this->assertEquals($groups, $finalGroupArray);
-	}
+        $this->assertEquals($groups, $finalGroupArray);
+    }
 
-	///////////////////////////
-	// Tests concerning authUser
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning authUser
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function authUserAuthenticatesIpWhenUserIpMatches() {
-		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
+    /**
+     * @test
+     */
+    public function authUserAuthenticatesIpWhenUserIpMatches()
+    {
+        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
-		$stubbedFixture
-			->expects($this->any())
-			->method('doesCurrentUsersIpMatch')
-			->will($this->returnValue(TRUE));
+        $stubbedFixture
+            ->expects($this->any())
+            ->method('doesCurrentUsersIpMatch')
+            ->will($this->returnValue(true));
 
-		// Should work
-		$stubbedFixture->authInfo = array(
-			'loginType' => 'FE',
-			'REMOTE_ADDR' => '1.2.3.4',
-		);
+        // Should work
+        $stubbedFixture->authInfo = array(
+            'loginType' => 'FE',
+            'REMOTE_ADDR' => '1.2.3.4',
+        );
 
-		$user = $stubbedFixture->authUser(array('uid' => 1));
-		$this->assertSame(200, $user);
-	}
+        $user = $stubbedFixture->authUser(array('uid' => 1));
+        $this->assertSame(200, $user);
+    }
 
-	/**
-	 * @test
-	 */
-	public function authUserDoesNotAuthenticateWhenUserIpFails() {
-		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
+    /**
+     * @test
+     */
+    public function authUserDoesNotAuthenticateWhenUserIpFails()
+    {
+        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
-		$stubbedFixture
-			->expects($this->any())
-			->method('doesCurrentUsersIpMatch')
-			->will($this->returnValue(FALSE));
+        $stubbedFixture
+            ->expects($this->any())
+            ->method('doesCurrentUsersIpMatch')
+            ->will($this->returnValue(false));
 
-		// Should work
-		$stubbedFixture->authInfo = array(
-			'loginType' => 'FE',
-			'REMOTE_ADDR' => '1.2.3.4',
-		);
+        // Should work
+        $stubbedFixture->authInfo = array(
+            'loginType' => 'FE',
+            'REMOTE_ADDR' => '1.2.3.4',
+        );
 
-		$user = $stubbedFixture->authUser(array('uid' => 1));
-		$this->assertSame(100, $user);
-	}
+        $user = $stubbedFixture->authUser(array('uid' => 1));
+        $this->assertSame(100, $user);
+    }
 }

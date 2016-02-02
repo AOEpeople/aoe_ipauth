@@ -32,388 +32,397 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class FeEntityServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase {
+class FeEntityServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+{
 
-	/**
-	 * @var \AOE\AoeIpauth\Domain\Service\FeEntityService
-	 */
-	protected $fixture;
+    /**
+     * @var \AOE\AoeIpauth\Domain\Service\FeEntityService
+     */
+    protected $fixture;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 */
-	protected $objectManager;
+    /**
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
 
-	/**
-	 *
-	 */
-	public function setUp() {
-		$this->testExtensionsToLoad = array(
-			'typo3conf/ext/aoe_ipauth',
-		);
-		parent::setUp();
+    /**
+     *
+     */
+    public function setUp()
+    {
+        $this->testExtensionsToLoad = array(
+            'typo3conf/ext/aoe_ipauth',
+        );
+        parent::setUp();
 
-		$this->fixturePath = __DIR__ . '/Fixtures/';
+        $this->fixturePath = __DIR__ . '/Fixtures/';
 
-		/** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
-		$this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-		$this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
-	}
+        /** @var $this->objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->fixture = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
+    }
 
-	/**
-	 *
-	 */
-	public function tearDown() {
-		unset($this->fixture);
-		parent::tearDown();
-	}
+    /**
+     *
+     */
+    public function tearDown()
+    {
+        unset($this->fixture);
+        parent::tearDown();
+    }
 
-	///////////////////////////
-	// Tests concerning findAllGroupsWithIpAuthentication
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findAllGroupsWithIpAuthentication
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function findAllGroupsWithIpAuthenticationFindsCorrectFeGroups() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultFeGroups.xml');
-		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
+    /**
+     * @test
+     */
+    public function findAllGroupsWithIpAuthenticationFindsCorrectFeGroups()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultFeGroups.xml');
+        $this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
-		$groups = $this->fixture->findAllGroupsWithIpAuthentication();
-		$expectedGroups = array(
-			array(
-				'uid' => 1,
-				'pid' => 1,
-				'tx_aoeipauth_ip' => array('1.2.3.4'),
-			),
-		);
+        $groups = $this->fixture->findAllGroupsWithIpAuthentication();
+        $expectedGroups = array(
+            array(
+                'uid' => 1,
+                'pid' => 1,
+                'tx_aoeipauth_ip' => array('1.2.3.4'),
+            ),
+        );
 
-		$this->assertEquals($groups, $expectedGroups);
-	}
+        $this->assertEquals($groups, $expectedGroups);
+    }
 
-	///////////////////////////
-	// Tests concerning findAllUsersWithIpAuthentication
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findAllUsersWithIpAuthentication
+    ///////////////////////////
 
-	/**
-	 * @test
-	 */
-	public function findAllUsersWithIpAuthenticationFindsCorrectFeUsers() {
-		$this->importDataSet($this->fixturePath . 'DbDefaultFeUsers.xml');
-		$this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
+    /**
+     * @test
+     */
+    public function findAllUsersWithIpAuthenticationFindsCorrectFeUsers()
+    {
+        $this->importDataSet($this->fixturePath . 'DbDefaultFeUsers.xml');
+        $this->importDataSet($this->fixturePath . 'DbDefaultTxAoeIpauthDomainModelIp.xml');
 
-		$groups = $this->fixture->findAllUsersWithIpAuthentication();
-		$expectedGroups = array(
-			array(
-				'uid' => 1,
-				'pid' => 1,
-				'tx_aoeipauth_ip' => array('5.6.7.8'),
-			),
-		);
+        $groups = $this->fixture->findAllUsersWithIpAuthentication();
+        $expectedGroups = array(
+            array(
+                'uid' => 1,
+                'pid' => 1,
+                'tx_aoeipauth_ip' => array('5.6.7.8'),
+            ),
+        );
 
-		$this->assertEquals($groups, $expectedGroups);
-	}
+        $this->assertEquals($groups, $expectedGroups);
+    }
 
-	///////////////////////////
-	// Tests concerning findAllGroupsAuthenticatedByIp
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findAllGroupsAuthenticatedByIp
+    ///////////////////////////
 
-	/**
-	 * Data Provider for findAllGroupsAuthenticatedByIpGetsCorrectGroups
-	 *
-	 * @return array
-	 */
-	public static function findAllGroupsAuthenticatedByIpGetsCorrectGroupsProvider() {
-		return array(
-			'whitelisted simple ip' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.200')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple ip' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.201')
-					)
-				),
-				array()
-			),
-			'whitelisted simple wildcard' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.*')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple wildcard' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.2.*')
-					)
-				),
-				array()
-			),
-			'whitelisted simple dash range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.201')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple dash range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.199')
-					)
-				),
-				array()
-			),
-			'whitelisted simple cidr range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.0/24')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-					)
-				)
-			),
-			'non-whitelisted simple cidr range' => array(
-				'192.168.2.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'title' => 'Test Group',
-						'tx_aoeipauth_ip' => array('192.168.1.0/24')
-					)
-				),
-				array()
-			),
-		);
-	}
+    /**
+     * Data Provider for findAllGroupsAuthenticatedByIpGetsCorrectGroups
+     *
+     * @return array
+     */
+    public static function findAllGroupsAuthenticatedByIpGetsCorrectGroupsProvider()
+    {
+        return array(
+            'whitelisted simple ip' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.200')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                    )
+                )
+            ),
+            'non-whitelisted simple ip' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.201')
+                    )
+                ),
+                array()
+            ),
+            'whitelisted simple wildcard' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.*')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                    )
+                )
+            ),
+            'non-whitelisted simple wildcard' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.2.*')
+                    )
+                ),
+                array()
+            ),
+            'whitelisted simple dash range' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.201')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                    )
+                )
+            ),
+            'non-whitelisted simple dash range' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.199')
+                    )
+                ),
+                array()
+            ),
+            'whitelisted simple cidr range' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.0/24')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                    )
+                )
+            ),
+            'non-whitelisted simple cidr range' => array(
+                '192.168.2.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'title' => 'Test Group',
+                        'tx_aoeipauth_ip' => array('192.168.1.0/24')
+                    )
+                ),
+                array()
+            ),
+        );
+    }
 
-	/**
-	 * @test
-	 * @dataProvider findAllGroupsAuthenticatedByIpGetsCorrectGroupsProvider
-	 */
-	public function findAllGroupsAuthenticatedByIpGetsCorrectGroups($ip, $knownGroups, $finalGroupArray) {
-		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
+    /**
+     * @test
+     * @dataProvider findAllGroupsAuthenticatedByIpGetsCorrectGroupsProvider
+     */
+    public function findAllGroupsAuthenticatedByIpGetsCorrectGroups($ip, $knownGroups, $finalGroupArray)
+    {
+        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
-		$stubbedFixture
-			->expects($this->any())
-			->method('findEntitiesWithIpAuthentication')
-			->will($this->returnValue($knownGroups));
+        $stubbedFixture
+            ->expects($this->any())
+            ->method('findEntitiesWithIpAuthentication')
+            ->will($this->returnValue($knownGroups));
 
-		$groups = $stubbedFixture->findAllGroupsAuthenticatedByIp($ip);
+        $groups = $stubbedFixture->findAllGroupsAuthenticatedByIp($ip);
 
-		$this->assertSame($groups, $finalGroupArray);
-	}
+        $this->assertSame($groups, $finalGroupArray);
+    }
 
-	///////////////////////////
-	// Tests concerning findAllUsersAuthenticatedByIp
-	///////////////////////////
+    ///////////////////////////
+    // Tests concerning findAllUsersAuthenticatedByIp
+    ///////////////////////////
 
 
-	/**
-	 * Data Provider for findAllUsersAuthenticatedByIpGetsCorrectUsers
-	 *
-	 * @return array
-	 */
-	public static function findAllUsersAuthenticatedByIpGetsCorrectUsersProvider() {
-		return array(
-			'whitelisted simple ip' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.200')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-					)
-				)
-			),
-			'non-whitelisted simple ip' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.201')
-					)
-				),
-				array()
-			),
-			'whitelisted simple wildcard' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.*')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-					)
-				)
-			),
-			'non-whitelisted simple wildcard' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.2.*')
-					)
-				),
-				array()
-			),
-			'whitelisted simple dash range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.201')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-					)
-				)
-			),
-			'non-whitelisted simple dash range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.199')
-					)
-				),
-				array()
-			),
-			'whitelisted simple cidr range' => array(
-				'192.168.1.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.0/24')
-					)
-				),
-				array(
-					1 => array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-					)
-				)
-			),
-			'non-whitelisted simple cidr range' => array(
-				'192.168.2.200',
-				array(
-					array(
-						'uid' => 1,
-						'pid' => 1,
-						'username' => 'Test User',
-						'tx_aoeipauth_ip' => array('192.168.1.0/24')
-					)
-				),
-				array()
-			),
-		);
-	}
+    /**
+     * Data Provider for findAllUsersAuthenticatedByIpGetsCorrectUsers
+     *
+     * @return array
+     */
+    public static function findAllUsersAuthenticatedByIpGetsCorrectUsersProvider()
+    {
+        return array(
+            'whitelisted simple ip' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.200')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                    )
+                )
+            ),
+            'non-whitelisted simple ip' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.201')
+                    )
+                ),
+                array()
+            ),
+            'whitelisted simple wildcard' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.*')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                    )
+                )
+            ),
+            'non-whitelisted simple wildcard' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.2.*')
+                    )
+                ),
+                array()
+            ),
+            'whitelisted simple dash range' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.201')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                    )
+                )
+            ),
+            'non-whitelisted simple dash range' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.1-192.168.1.199')
+                    )
+                ),
+                array()
+            ),
+            'whitelisted simple cidr range' => array(
+                '192.168.1.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.0/24')
+                    )
+                ),
+                array(
+                    1 => array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                    )
+                )
+            ),
+            'non-whitelisted simple cidr range' => array(
+                '192.168.2.200',
+                array(
+                    array(
+                        'uid' => 1,
+                        'pid' => 1,
+                        'username' => 'Test User',
+                        'tx_aoeipauth_ip' => array('192.168.1.0/24')
+                    )
+                ),
+                array()
+            ),
+        );
+    }
 
-	/**
-	 * @test
-	 * @dataProvider findAllUsersAuthenticatedByIpGetsCorrectUsersProvider
-	 */
-	public function findAllUsersAuthenticatedByIpGetsCorrectUsers($ip, $knownUsers, $finalUserArray) {
-		$stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
+    /**
+     * @test
+     * @dataProvider findAllUsersAuthenticatedByIpGetsCorrectUsersProvider
+     */
+    public function findAllUsersAuthenticatedByIpGetsCorrectUsers($ip, $knownUsers, $finalUserArray)
+    {
+        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
-		$stubbedFixture
-			->expects($this->any())
-			->method('findEntitiesWithIpAuthentication')
-			->will($this->returnValue($knownUsers));
+        $stubbedFixture
+            ->expects($this->any())
+            ->method('findEntitiesWithIpAuthentication')
+            ->will($this->returnValue($knownUsers));
 
-		$users = $stubbedFixture->findAllUsersAuthenticatedByIp($ip);
+        $users = $stubbedFixture->findAllUsersAuthenticatedByIp($ip);
 
-		$this->assertSame($users, $finalUserArray);
-	}
+        $this->assertSame($users, $finalUserArray);
+    }
 }

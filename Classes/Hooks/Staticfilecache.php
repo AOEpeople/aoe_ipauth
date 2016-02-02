@@ -32,58 +32,60 @@ use TYPO3\CMS\Documentation\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Hooks
  */
-class Staticfilecache {
+class Staticfilecache
+{
 
-	/**
-	 * @var \AOE\AoeIpauth\Domain\Service\ContentService;
-	 */
-	protected $contentService = NULL;
+    /**
+     * @var \AOE\AoeIpauth\Domain\Service\ContentService;
+     */
+    protected $contentService = null;
 
-	/**
-	 * UserFunc for the tx_ncstaticfilecache to avoid caching
-	 * when a tt_content element on the page has user access settings set
-	 *
-	 * @param array $parameters
-	 * @param \tx_ncstaticfilecache $parent
-	 * @return void
-	 */
-	public function createFileInitializeVariables(array &$parameters, \tx_ncstaticfilecache $parent) {
+    /**
+     * UserFunc for the tx_ncstaticfilecache to avoid caching
+     * when a tt_content element on the page has user access settings set
+     *
+     * @param array $parameters
+     * @param \tx_ncstaticfilecache $parent
+     * @return void
+     */
+    public function createFileInitializeVariables(array &$parameters, \tx_ncstaticfilecache $parent)
+    {
+        $tsfe = $parameters['TSFE'];
+        $staticallyCachable = $parameters['staticCacheable'];
 
-		$tsfe = $parameters['TSFE'];
-		$staticallyCachable = $parameters['staticCacheable'];
+        // Don't do anything if the whole page is already not statically cachable
+        if (!$staticallyCachable) {
+            return;
+        }
 
-		// Don't do anything if the whole page is already not statically cachable
-		if (!$staticallyCachable) {
-			return;
-		}
+        // Only check if this feature is enabled in config.
+        $tsConfig = $tsfe->tmpl->setup['config.'];
+        $isStaticAwarenessEnabled = (!empty($tsConfig) && isset($tsConfig['aoe_ipauth.']) && $tsConfig['aoe_ipauth.']['staticAwareness']);
+        if (!$isStaticAwarenessEnabled) {
+            return;
+        }
 
-		// Only check if this feature is enabled in config.
-		$tsConfig = $tsfe->tmpl->setup['config.'];
-		$isStaticAwarenessEnabled = (!empty($tsConfig) && isset($tsConfig['aoe_ipauth.']) && $tsConfig['aoe_ipauth.']['staticAwareness']);
-		if (!$isStaticAwarenessEnabled) {
-			return;
-		}
+        $pageId = $tsfe->id;
+        $languageContent = $tsfe->sys_language_content;
 
-		$pageId = $tsfe->id;
-		$languageContent = $tsfe->sys_language_content;
+        $pageHasUserAwareContent = $this->isPageUserCustomized($pageId, $languageContent);
+        $allowStaticCaching = (!$pageHasUserAwareContent);
 
-		$pageHasUserAwareContent = $this->isPageUserCustomized($pageId, $languageContent);
-		$allowStaticCaching = (!$pageHasUserAwareContent);
+        $parameters['staticCacheable'] = $allowStaticCaching;
+    }
 
-		$parameters['staticCacheable'] = $allowStaticCaching;
-	}
-
-	/**
-	 * Uses service to check if a page is user customized
-	 *
-	 * @param int $pageId
-	 * @param int $language
-	 * @return bool
-	 */
-	protected function isPageUserCustomized($pageId, $language) {
-		if (NULL === $this->contentService) {
-			$this->contentService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Domain\\Service\\ContentService');
-		}
-		return $this->contentService->isPageUserCustomized($pageId, $language);
-	}
+    /**
+     * Uses service to check if a page is user customized
+     *
+     * @param int $pageId
+     * @param int $language
+     * @return bool
+     */
+    protected function isPageUserCustomized($pageId, $language)
+    {
+        if (null === $this->contentService) {
+            $this->contentService = GeneralUtility::makeInstance('AOE\\AoeIpauth\\Domain\\Service\\ContentService');
+        }
+        return $this->contentService->isPageUserCustomized($pageId, $language);
+    }
 }
