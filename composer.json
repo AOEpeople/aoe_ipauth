@@ -40,7 +40,9 @@
   "scripts": {
     "post-autoload-dump": [
       "mkdir -p .Build/Web/typo3conf/ext/",
-      "[ -L .Build/Web/typo3conf/ext/aoe_ipauth ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/aoe_ipauth"
+      "[ -L .Build/Web/typo3conf/ext/aoe_ipauth ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/aoe_ipauth",
+      "mkdir -p typo3conf/ext",
+      "[ -L typo3conf/ext/aoe_ipauth ] || ln -snvf ../../. typo3conf/ext/aoe_ipauth"
     ]
   },
   "extra": {
