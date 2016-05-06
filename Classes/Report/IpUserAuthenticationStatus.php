@@ -95,7 +95,6 @@ class IpUserAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderInt
             $userInfo .= '<thead><tr><th style="padding-bottom: 10px;">User</th><th>IP/Range</th></tr></thead>';
             $userInfo .= '<tbody>';
 
-            // Add user group strings
             foreach ($users as $user) {
                 $uid = $user['uid'];
                 $ips = implode(', ', $user['tx_aoeipauth_ip']);
@@ -116,7 +115,6 @@ class IpUserAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderInt
 
             $userInfo .= '<br /><br />Your current IP is: <strong>' . $this->myIp . '</strong>';
 
-            // Inform about the groups
             $reports[] = $this->objectManager->get('TYPO3\\CMS\\Reports\\Status',
                 'IP User Authentication',
                 'Some users with automatic IP authentication were found.',
