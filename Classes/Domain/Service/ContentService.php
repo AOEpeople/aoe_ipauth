@@ -26,7 +26,6 @@ namespace AOE\AoeIpauth\Domain\Service;
  ***************************************************************/
 
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class ContentService

@@ -26,6 +26,7 @@ namespace AOE\AoeIpauth\Hooks;
  ***************************************************************/
 
 use AOE\AoeIpauth\Service\IpMatchingService;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -53,7 +54,7 @@ class Tcemain
      * @param string $table
      * @param string $id
      * @param array $fieldArray
-     * @param t3lib_TCEmain $pObj
+     * @param DataHandler $pObj
      * @return void
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$pObj)
@@ -110,8 +111,8 @@ class Tcemain
     /**
      * Adds a simple flash message
      *
-     * @param $message
-     * @param $code
+     * @param string $message
+     * @param int $code
      * @return void
      */
     protected function addFlashMessage($message, $code)
