@@ -35,7 +35,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Authentication extends \TYPO3\CMS\Sv\AbstractAuthenticationService
 {
 
-
     /**
      * @var \AOE\AoeIpauth\Service\IpMatchingService
      */
@@ -105,7 +104,7 @@ class Authentication extends \TYPO3\CMS\Sv\AbstractAuthenticationService
      * Otherwise authentication may fail because we may don't have a password.
      *
      * @param array Data of user.
-     * @return bool
+     * @return int
      */
     public function authUser($user)
     {
