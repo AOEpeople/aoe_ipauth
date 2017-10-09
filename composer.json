@@ -5,7 +5,6 @@
   "keywords": ["TYPO3 CMS", "Authentication"],
   "license": ["GPL-2.0+"],
   "homepage": "https://github.com/AOEpeople/aoe_ipauth",
-  "version": "1.0.2",
   "support": {
     "issues": "https://github.com/AOEpeople/aoe_ipauth/issues"
   },
