@@ -26,6 +26,8 @@ namespace AOE\AoeIpauth\Domain\Service;
  ***************************************************************/
 
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class ContentService
@@ -65,12 +67,17 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function isPageBareUserCustomized($uid, $languageUid)
     {
-        $enableFields = EnableFieldsUtility::enableFields(self::CONTENT_TABLE);
-        $pages = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            'uid,pid',
-            self::PAGES_TABLE,
-            'fe_group != 0 AND uid = ' . intval($uid) . ' ' . $enableFields
-        );
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable(self::PAGES_TABLE);
+        $queryBuilder->getRestrictions()->removeAll();
+        $pages = $queryBuilder->select('uid', 'pid')
+            ->from(self::PAGES_TABLE)
+            ->where(
+                $queryBuilder->expr()->neq('fe_group', 0),
+                $queryBuilder->expr()->eq('uid', (int)$uid . ' ' . EnableFieldsUtility::enableFields(self::CONTENT_TABLE))
+            )
+            ->execute()
+            ->fetchAll();
+
         $isPageCustomized = (count($pages) > 0);
         return $isPageCustomized;
     }
@@ -88,11 +95,19 @@ class ContentService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findUserCustomizedContentByPageId($uid, $languageUid)
     {
-        $enableFields = EnableFieldsUtility::enableFields(self::CONTENT_TABLE);
-        $ttContent = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            'uid,pid',
-            self::CONTENT_TABLE,
-            'fe_group > 0 AND sys_language_uid = ' . intval($languageUid) . ' AND pid = ' . intval($uid) . ' ' . $enableFields);
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable(self::CONTENT_TABLE);
+        $queryBuilder->getRestrictions()->removeAll();
+        $ttContent = $queryBuilder->select('uid', 'pid')
+            ->from(self::CONTENT_TABLE)
+            ->where(
+                $queryBuilder->expr()->gt('fe_group', 0),
+                $queryBuilder->expr()->eq('sys_language_uid', (int)$languageUid),
+                $queryBuilder->expr()->eq('pid', (int)$uid . ' ' . EnableFieldsUtility::enableFields(self::CONTENT_TABLE))
+            )
+            ->execute()
+            ->fetchAll();
+
+
         return $ttContent;
     }
 }
