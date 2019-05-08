@@ -1,7 +1,5 @@
 <?php
 
-use AOE\AoeIpauth\Hooks\Tcemain;
-
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
@@ -15,7 +13,7 @@ if ('BE' === TYPO3_MODE) {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig($allowedTablesTs);
 
     // Hooks
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$_EXTKEY] = Tcemain::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$_EXTKEY] = \AOE\AoeIpauth\Hooks\Tcemain::class;
 } elseif ('FE' === TYPO3_MODE) {
     $extensionConfiguration = unserialize($_EXTCONF);
     $GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_fetchUserIfNoSession'] =
