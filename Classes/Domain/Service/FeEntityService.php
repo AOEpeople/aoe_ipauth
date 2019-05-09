@@ -26,6 +26,7 @@ namespace AOE\AoeIpauth\Domain\Service;
  ***************************************************************/
 
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -141,8 +142,15 @@ class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function findEntitiesWithIpAuthentication($table)
     {
-        $enableFields = EnableFieldsUtility::enableFields($table);
-        $entities = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,pid', $table, 'tx_aoeipauth_ip > 0' . $enableFields);
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        $queryBuilder->getRestrictions()->removeAll();
+        $entities = $queryBuilder->select('uid','pid')
+            ->from($table)
+            ->where(
+                $queryBuilder->expr()->gt('tx_aoeipauth_ip', '0' . EnableFieldsUtility::enableFields($table))
+            )
+            ->execute()
+            ->fetchAll();
 
         if (empty($entities)) {
             return array();

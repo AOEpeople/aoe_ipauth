@@ -41,7 +41,7 @@ $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ),
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('aoe_ipauth') . 'Resources/Public/Icons/tx_aoeipauth_domain_model_ip.png'
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('aoe_ipauth') . 'Resources/Public/Icons/tx_aoeipauth_domain_model_ip.png'
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden, ip, description',

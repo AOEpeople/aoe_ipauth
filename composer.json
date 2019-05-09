@@ -9,10 +9,10 @@
     "issues": "https://github.com/AOEpeople/aoe_ipauth/issues"
   },
   "require": {
-      "typo3/cms": ">=6.2.1,<9.0"
+      "typo3/cms": ">=8.7.0,<10.0"
   },
   "require-dev": {
-    "nimut/testing-framework": "2.0.0"
+    "nimut/testing-framework": "^2.0 || ^4.1"
   },
   "authors": [
     {
