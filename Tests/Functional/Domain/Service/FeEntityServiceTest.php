@@ -261,7 +261,7 @@ class FeEntityServiceTest extends FunctionalTestCase
      */
     public function findAllGroupsAuthenticatedByIpGetsCorrectGroups($ip, $knownGroups, $finalGroupArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -415,7 +415,7 @@ class FeEntityServiceTest extends FunctionalTestCase
      */
     public function findAllUsersAuthenticatedByIpGetsCorrectUsers($ip, $knownUsers, $finalUserArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())

@@ -51,7 +51,7 @@ class TcemainTest extends FunctionalTestCase
         );
         parent::setUp();
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Tcemain', array('addFlashMessage'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Tcemain', array('addFlashMessage'));
         $stubFixture
             ->expects($this->any())
             ->method('addFlashMessage')

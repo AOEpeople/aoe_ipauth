@@ -90,9 +90,9 @@ class StaticfilecacheTest extends FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
@@ -124,9 +124,9 @@ class StaticfilecacheTest extends FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
@@ -158,9 +158,9 @@ class StaticfilecacheTest extends FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
@@ -192,9 +192,9 @@ class StaticfilecacheTest extends FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
