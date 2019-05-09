@@ -15,9 +15,8 @@ $EM_CONF[$_EXTKEY] = array(
     'uploadfolder' => '0',
     'createDirs' => '',
     'modify_tables' => '',
-    'clearCacheOnLoad' => 0,
-    'lockType' => '',
-    'version' => '1.2.0',
+    'clearCacheOnLoad' => 0,    'lockType' => '',
+    'version' => '1.1.0',
     'constraints' => array(
         'depends' => array(
             'typo3' => '8.7.0-9.5.99'

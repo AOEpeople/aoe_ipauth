@@ -12,7 +12,7 @@
       "typo3/cms": ">=8.7.0,<10.0"
   },
   "require-dev": {
-    "nimut/testing-framework": "2.0.0"
+    "nimut/testing-framework": "^2.0 || ^4.1"
   },
   "authors": [
     {
