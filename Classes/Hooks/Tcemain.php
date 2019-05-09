@@ -49,6 +49,13 @@ class Tcemain
     protected $objectManager;
 
     /**
+     * @param ObjectManager $objectManager
+     */
+    public function injectObjectManager(ObjectManager $objectManager) {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * Post process
      *
      * @param string $status
@@ -65,7 +72,7 @@ class Tcemain
         }
 
         /** @var \AOE\AoeIpauth\Service\IpMatchingService $ipMatchingService */
-        $ipMatchingService = $this->getObjectManager()->get('AOE\\AoeIpauth\\Service\\IpMatchingService');
+        $ipMatchingService = $this->objectManager->get(IpMatchingService::class);
 
         $potentialIp = $fieldArray['ip'];
 
@@ -128,20 +135,5 @@ class Tcemain
         $flashMessageService = $this->objectManager->get(FlashMessageService::class);
         $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
         $messageQueue->addMessage($flashMessage);
-    }
-
-    /**
-     * Gets the object manager
-     *
-     * @return ObjectManager
-     */
-    protected function getObjectManager()
-    {
-        // create object manager
-        if (!$this->objectManager) {
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            $this->objectManager =  clone $objectManager;
-        }
-        return $this->objectManager;
     }
 }
