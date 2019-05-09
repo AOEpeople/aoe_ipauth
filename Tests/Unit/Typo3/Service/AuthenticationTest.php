@@ -120,7 +120,7 @@ class AuthenticationTest extends UnitTestCase
      */
     public function getUserAuthenticatesUser($ip, $ipAuthenticatedUsers, $finalUserArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -180,7 +180,7 @@ class AuthenticationTest extends UnitTestCase
      */
     public function getGroupsAuthenticatesGroups($ip, $ipAuthenticatedGroups, $finalGroupArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -212,7 +212,7 @@ class AuthenticationTest extends UnitTestCase
      */
     public function authUserAuthenticatesIpWhenUserIpMatches()
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -234,7 +234,7 @@ class AuthenticationTest extends UnitTestCase
      */
     public function authUserDoesNotAuthenticateWhenUserIpFails()
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
         $stubbedFixture
             ->expects($this->any())
