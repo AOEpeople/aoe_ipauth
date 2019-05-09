@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Hooks;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -49,13 +49,6 @@ class Tcemain
     protected $objectManager;
 
     /**
-     * @param ObjectManager $objectManager
-     */
-    public function injectObjectManager(ObjectManager $objectManager) {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
      * Post process
      *
      * @param string $status
@@ -67,6 +60,9 @@ class Tcemain
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$pObj)
     {
+        /** @var ObjectManager $this->objectManager */
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
         if (self::IP_TABLE != $table || empty($fieldArray) || !isset($fieldArray['ip'])) {
             return;
         }
@@ -114,7 +110,6 @@ class Tcemain
             FlashMessage::ERROR
         );
     }
-
 
     /**
      * Adds a simple flash message
