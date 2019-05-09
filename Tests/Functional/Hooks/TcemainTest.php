@@ -26,13 +26,14 @@ namespace AOE\AoeIpauth\Tests\Functional\Hooks;
  ***************************************************************/
 
 use AOE\AoeIpauth\Hooks\Tcemain;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
 /**
  * Class TcemainTest
  *
  * @package AOE\AoeIpauth\Tests\Functional\Hooks
  */
-class TcemainTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+class TcemainTest extends FunctionalTestCase
 {
 
     /**

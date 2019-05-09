@@ -25,6 +25,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Typo3\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Unit\Typo3\Service
  */
-class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class AuthenticationTest extends UnitTestCase
 {
 
     /**

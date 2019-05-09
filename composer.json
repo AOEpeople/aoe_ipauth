@@ -28,8 +28,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "AOE\\AoeIPauth\\Tests\\": "Tests",
-      "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+      "AOE\\AoeIPauth\\Tests\\": "Tests"
     }
   },
   "config": {
