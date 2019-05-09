@@ -25,6 +25,7 @@ namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class FeEntityServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+class FeEntityServiceTest extends FunctionalTestCase
 {
 
     /**
@@ -260,7 +261,7 @@ class FeEntityServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
      */
     public function findAllGroupsAuthenticatedByIpGetsCorrectGroups($ip, $knownGroups, $finalGroupArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -414,7 +415,7 @@ class FeEntityServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
      */
     public function findAllUsersAuthenticatedByIpGetsCorrectUsers($ip, $knownUsers, $finalUserArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService', array('findEntitiesWithIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())

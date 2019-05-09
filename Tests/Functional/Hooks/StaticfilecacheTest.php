@@ -25,6 +25,7 @@ namespace AOE\AoeIpauth\Tests\Functional\Hooks;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Functional\Hooks
  */
-class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+class StaticfilecacheTest extends FunctionalTestCase
 {
 
     /**
@@ -89,9 +90,9 @@ class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
@@ -123,9 +124,9 @@ class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
@@ -157,9 +158,9 @@ class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')
@@ -191,9 +192,9 @@ class StaticfilecacheTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
             )
         );
 
-        $ncFixture = $this->getMock('tx_ncstaticfilecache');
+        $ncFixture = $this->getAccessibleMock('tx_ncstaticfilecache');
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Staticfilecache', array('isPageUserCustomized'));
         $stubFixture
             ->expects($this->any())
             ->method('isPageUserCustomized')

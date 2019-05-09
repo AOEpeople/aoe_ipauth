@@ -9,7 +9,8 @@
     "issues": "https://github.com/AOEpeople/aoe_ipauth/issues"
   },
   "require": {
-      "typo3/cms": ">=8.7.0,<10.0"
+    "typo3/cms-core": ">=8.7.0,<10.0",
+    "nimut/typo3-complete": "^8.7"
   },
   "require-dev": {
     "nimut/testing-framework": "^2.0 || ^4.1"
@@ -28,8 +29,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "AOE\\AoeIPauth\\Tests\\": "Tests",
-      "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+      "AOE\\AoeIPauth\\Tests\\": "Tests"
     }
   },
   "config": {
@@ -40,6 +40,18 @@
     "post-autoload-dump": [
       "mkdir -p .Build/Web/typo3conf/ext/",
       "[ -L .Build/Web/typo3conf/ext/aoe_ipauth ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/aoe_ipauth"
+    ],
+    "test:unit": [
+      "[ -e .Build/bin/phpunit ] || composer update",
+      "TYPO3_PATH_WEB=.Build/Web .Build/bin/phpunit --colors -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit"
+    ],
+    "test:functional": [
+      "[ -e .Build/bin/phpunit ] || composer update",
+      "TYPO3_PATH_WEB=$PWD/.Build/Web typo3DatabaseName=aoe_ipauth typo3DatabaseHost=127.0.0.1 typo3DatabaseUsername=root typo3DatabasePassword=root .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional"
+    ],
+    "test:all": [
+      "@test:unit",
+      "@test:functional"
     ]
   },
   "extra": {

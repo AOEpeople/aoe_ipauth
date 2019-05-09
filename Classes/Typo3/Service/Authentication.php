@@ -25,8 +25,8 @@ namespace AOE\AoeIpauth\Typo3\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Authentication\AbstractAuthenticationService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Sv\AbstractAuthenticationService;
 
 /**
  * Class Authentication
