@@ -18,8 +18,6 @@ if ('BE' === TYPO3_MODE) {
     $extensionConfiguration = unserialize($_EXTCONF);
     $GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_fetchUserIfNoSession'] =
         isset($extensionConfiguration['fetchFeUserIfNoSession']) ? $extensionConfiguration['fetchFeUserIfNoSession'] : 1;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['nc_staticfilecache/class.tx_ncstaticfilecache.php']['createFile_initializeVariables'][$_EXTKEY] =
-        '\AOE\AoeIpauth\Hooks\Staticfilecache->createFileInitializeVariables';
     unset($extensionConfiguration);
 }
 
