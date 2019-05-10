@@ -25,6 +25,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Typo3\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Unit\Typo3\Service
  */
-class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class AuthenticationTest extends UnitTestCase
 {
 
     /**
@@ -119,7 +120,7 @@ class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function getUserAuthenticatesUser($ip, $ipAuthenticatedUsers, $finalUserArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllUsersByIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -179,7 +180,7 @@ class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function getGroupsAuthenticatesGroups($ip, $ipAuthenticatedGroups, $finalGroupArray)
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('findAllGroupsByIpAuthentication'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -211,7 +212,7 @@ class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function authUserAuthenticatesIpWhenUserIpMatches()
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
         $stubbedFixture
             ->expects($this->any())
@@ -233,7 +234,7 @@ class AuthenticationTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function authUserDoesNotAuthenticateWhenUserIpFails()
     {
-        $stubbedFixture = $this->getMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
+        $stubbedFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Typo3\\Service\\Authentication', array('doesCurrentUsersIpMatch'));
 
         $stubbedFixture
             ->expects($this->any())

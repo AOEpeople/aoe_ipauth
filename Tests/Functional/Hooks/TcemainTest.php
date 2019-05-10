@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Tests\Functional\Hooks;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -26,13 +26,14 @@ namespace AOE\AoeIpauth\Tests\Functional\Hooks;
  ***************************************************************/
 
 use AOE\AoeIpauth\Hooks\Tcemain;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
 /**
  * Class TcemainTest
  *
  * @package AOE\AoeIpauth\Tests\Functional\Hooks
  */
-class TcemainTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+class TcemainTest extends FunctionalTestCase
 {
 
     /**
@@ -50,7 +51,7 @@ class TcemainTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
         );
         parent::setUp();
 
-        $stubFixture = $this->getMock('AOE\\AoeIpauth\\Hooks\\Tcemain', array('addFlashMessage'));
+        $stubFixture = $this->getAccessibleMock('AOE\\AoeIpauth\\Hooks\\Tcemain', array('addFlashMessage'));
         $stubFixture
             ->expects($this->any())
             ->method('addFlashMessage')

@@ -13,14 +13,11 @@ if ('BE' === TYPO3_MODE) {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig($allowedTablesTs);
 
     // Hooks
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$_EXTKEY] =
-        'EXT:' . $_EXTKEY . '/Classes/Hooks/Tcemain.php:Tx_AoeIpauth_Hooks_Tcemain';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$_EXTKEY] = \AOE\AoeIpauth\Hooks\Tcemain::class;
 } elseif ('FE' === TYPO3_MODE) {
     $extensionConfiguration = unserialize($_EXTCONF);
     $GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_fetchUserIfNoSession'] =
         isset($extensionConfiguration['fetchFeUserIfNoSession']) ? $extensionConfiguration['fetchFeUserIfNoSession'] : 1;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['nc_staticfilecache/class.tx_ncstaticfilecache.php']['createFile_initializeVariables'][$_EXTKEY] =
-        '\AOE\AoeIpauth\Hooks\Staticfilecache->createFileInitializeVariables';
     unset($extensionConfiguration);
 }
 

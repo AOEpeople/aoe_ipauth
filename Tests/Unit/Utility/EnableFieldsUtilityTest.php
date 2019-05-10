@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -26,6 +26,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Utility;
  ***************************************************************/
 
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -33,7 +34,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Unit\Utility
  */
-class EnableFieldsUtilityTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class EnableFieldsUtilityTest extends UnitTestCase
 {
 
     /**

@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Typo3\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -26,13 +26,14 @@ namespace AOE\AoeIpauth\Typo3\Service;
  ***************************************************************/
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Sv\AbstractAuthenticationService;
 
 /**
  * Class Authentication
  *
  * @package AOE\AoeIpauth\Typo3\Service
  */
-class Authentication extends \TYPO3\CMS\Sv\AbstractAuthenticationService
+class Authentication extends AbstractAuthenticationService
 {
 
     /**

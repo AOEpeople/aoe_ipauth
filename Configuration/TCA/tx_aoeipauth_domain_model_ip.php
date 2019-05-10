@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -41,7 +41,7 @@ $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ),
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('aoe_ipauth') . 'Resources/Public/Icons/tx_aoeipauth_domain_model_ip.png'
+        \TYPO3\CMS\Core\Utility\PathUtility::stripPathSitePrefix(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('aoe_ipauth')) . 'Resources/Public/Icons/tx_aoeipauth_domain_model_ip.png'
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden, ip, description',
