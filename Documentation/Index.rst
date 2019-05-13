@@ -30,7 +30,7 @@ IP Authentication
 		authentication,IP Based
 
 	:Copyright:
-		2015
+		2019
 
 	:Author:
 		AOE GmbH
@@ -39,7 +39,7 @@ IP Authentication
 		dev@aoe.com
 
 	:License:
-		copyright 2015 AOE GmbH
+		copyright 2019 AOE GmbH
 
 		All rights reserved
 
