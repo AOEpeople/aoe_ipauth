@@ -1,41 +1,5 @@
 language: php
 
-php:
-  - 7.0
-  - 7.1
-  - 7.2
-  - 7.3
-
-env:
-  - TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=0
-  - TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=0
-  - TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
-
-matrix:
-  exclude:
-    - env: TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=0
-      php: 7.0
-    - env: TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=0
-      php: 7.1
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
-      php: 7.0
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
-      php: 7.1
-  include:
-    - env: TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=1
-      php: 7.0
-    - env: TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=1
-      php: 7.1
-    - env: TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=1
-      php: 7.2
-    - env: TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=1
-      php: 7.2
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=1
-      php: 7.2
-  allow_failures:
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=1
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
-
 notifications:
   email:
     recipients:
@@ -44,6 +8,9 @@ notifications:
     on_failure: never
 
 sudo: false
+
+services:
+  - mysql
 
 addons:
   apt:
@@ -111,3 +78,52 @@ script:
       php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
       find 'Tests/Functional' -wholename '*Test.php' -exec php ocular.phar code-coverage:upload --format=php-clover {}functionaltest-coverage.clover \;
     fi
+
+jobs:
+  allow_failures:
+    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=1
+    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
+  include:
+    - stage: test
+      php: 7.0
+      env: TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=1
+    - stage: test
+      php: 7.1
+      env: TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=1
+    - stage: test
+      php: 7.2
+      env: TYPO3_VERSION=^8.7 COVERAGE=1 FUNCTIONAL=1
+    - stage: test
+      php: 7.3
+      env: TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=1
+    - stage: test
+      php: 7.2
+      env: TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=1
+    - stage: test
+      php: 7.3
+      env: TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=1
+    - stage: test
+      php: 7.3
+      env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=1
+    - stage: ship to ter
+      if: tag IS present
+      php: 7.0
+      install: skip
+      before_script: skip
+      script:
+        - |
+          if [ -n "$TYPO3_ORG_USERNAME" ] && [ -n "$TYPO3_ORG_PASSWORD" ]; then
+            echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
+
+            # Install ter client
+            composer global require helhum/ter-client
+
+            # Build extension files
+            composer extension-release
+
+            # Upload
+            TAG_MESSAGE=`git log -1 --pretty=%B`
+            echo "Tag-Message: ${TAG_MESSAGE}"
+            echo "Uploading release ${TRAVIS_TAG} to TER"
+            $HOME/.composer/vendor/bin/ter-client upload typo3_console . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
+          fi;
