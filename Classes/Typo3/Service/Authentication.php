@@ -26,7 +26,7 @@ namespace AOE\AoeIpauth\Typo3\Service;
  ***************************************************************/
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Sv\AbstractAuthenticationService;
+use TYPO3\CMS\Core\Authentication\AbstractAuthenticationService;
 
 /**
  * Class Authentication
@@ -89,7 +89,6 @@ class Authentication extends AbstractAuthenticationService
 
         $clientIp = $this->authInfo['REMOTE_ADDR'];
         $ipAuthenticatedUsers = $this->findAllUsersByIpAuthentication($clientIp);
-
         if (empty($ipAuthenticatedUsers)) {
             return false;
         }
