@@ -44,7 +44,6 @@ $GLOBALS['TCA']['tx_aoeipauth_domain_model_ip'] = array(
         \TYPO3\CMS\Core\Utility\PathUtility::stripPathSitePrefix(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('aoe_ipauth')) . 'Resources/Public/Icons/tx_aoeipauth_domain_model_ip.png'
     ),
     'interface' => array(
-        'showRecordFieldList' => 'hidden, ip, description',
     ),
     'types' => array(
         '1' => array('showitem' => 'hidden;;1, ip, description'),
