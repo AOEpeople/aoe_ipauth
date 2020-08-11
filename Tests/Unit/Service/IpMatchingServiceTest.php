@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -25,6 +25,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Unit\Service
  */
-class IpMatchingServiceTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class IpMatchingServiceTest extends UnitTestCase
 {
 
     /**

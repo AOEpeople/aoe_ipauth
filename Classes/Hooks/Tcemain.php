@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Hooks;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -29,6 +29,7 @@ use AOE\AoeIpauth\Service\IpMatchingService;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -59,12 +60,15 @@ class Tcemain
      */
     public function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$pObj)
     {
+        /** @var ObjectManager $this->objectManager */
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
         if (self::IP_TABLE != $table || empty($fieldArray) || !isset($fieldArray['ip'])) {
             return;
         }
 
         /** @var \AOE\AoeIpauth\Service\IpMatchingService $ipMatchingService */
-        $ipMatchingService = $this->getObjectManager()->get('AOE\\AoeIpauth\\Service\\IpMatchingService');
+        $ipMatchingService = $this->objectManager->get(IpMatchingService::class);
 
         $potentialIp = $fieldArray['ip'];
 
@@ -107,7 +111,6 @@ class Tcemain
         );
     }
 
-
     /**
      * Adds a simple flash message
      *
@@ -117,27 +120,15 @@ class Tcemain
      */
     protected function addFlashMessage($message, $code)
     {
-        $flashMessage = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+        $flashMessage = GeneralUtility::makeInstance(FlashMessage::class,
             $message,
             '',
             $code,
             true
         );
-        FlashMessageQueue::addMessage($flashMessage);
-    }
 
-    /**
-     * Gets the object manager
-     *
-     * @return ObjectManager
-     */
-    protected function getObjectManager()
-    {
-        // create object manager
-        if (!$this->objectManager) {
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            $this->objectManager =  clone $objectManager;
-        }
-        return $this->objectManager;
+        $flashMessageService = $this->objectManager->get(FlashMessageService::class);
+        $messageQueue = $flashMessageService->getMessageQueueByIdentifier();
+        $messageQueue->addMessage($flashMessage);
     }
 }

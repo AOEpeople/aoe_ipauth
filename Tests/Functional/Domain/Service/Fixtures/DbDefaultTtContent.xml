@@ -37,15 +37,6 @@
 		<fe_group>1</fe_group>
 	</pages>
 
-	<pages_language_overlay>
-		<uid>100</uid>
-		<pid>1</pid>
-		<title>Overlay for uid = 1</title>
-		<deleted>0</deleted>
-		<hidden>0</hidden>
-		<sys_language_uid>2</sys_language_uid>
-	</pages_language_overlay>
-
 	<tt_content>
 		<uid>205</uid>
 		<pid>1</pid>

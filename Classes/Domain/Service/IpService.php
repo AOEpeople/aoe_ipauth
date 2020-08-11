@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Domain\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -26,6 +26,7 @@ namespace AOE\AoeIpauth\Domain\Service;
  ***************************************************************/
 
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -69,8 +70,16 @@ class IpService implements  \TYPO3\CMS\Core\SingletonInterface
      */
     protected function findIpsByField($field, $value)
     {
-        $enableFields = EnableFieldsUtility::enableFields(self::TABLE);
-        $ips = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('ip', self::TABLE, $field . ' = ' . intval($value) . ' ' . $enableFields);
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable(self::TABLE);
+        $queryBuilder->getRestrictions()->removeAll();
+        $ips = $queryBuilder->select('ip')
+            ->from(self::TABLE)
+            ->where(
+                $queryBuilder->expr()->eq($field, (int)$value . ' ' . EnableFieldsUtility::enableFields(self::TABLE))
+            )
+            ->execute()
+            ->fetchAll();
+
         if (empty($ips)) {
             return array();
         }

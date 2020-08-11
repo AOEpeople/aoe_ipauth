@@ -4,7 +4,7 @@ namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -25,6 +25,7 @@ namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Tests\Functional\Domain\Service
  */
-class IpServiceTest extends \TYPO3\CMS\Core\Tests\FunctionalTestCase
+class IpServiceTest extends FunctionalTestCase
 {
 
     /**

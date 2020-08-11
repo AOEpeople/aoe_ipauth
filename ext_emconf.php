@@ -1,10 +1,10 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'IP Authentication',
     'description' => 'Authenticates users based on IP address settings',
     'category' => 'services',
-    'author' => 'DEV',
+    'author' => 'Tomas Norre Mikkelsen',
     'author_email' => 'dev@aoe.com',
     'author_company' => 'AOE GmbH',
     'shy' => '',
@@ -17,14 +17,14 @@ $EM_CONF[$_EXTKEY] = array(
     'modify_tables' => '',
     'clearCacheOnLoad' => 0,
     'lockType' => '',
-    'version' => '1.1.0',
-    'constraints' => array(
-        'depends' => array(
-            'typo3' => '6.2.1-8.7.99'
-        ),
-        'conflicts' => array(
-        ),
-        'suggests' => array(
-        ),
-    ),
-);
+    'version' => '2.0.1',
+    'constraints' => [
+        'depends' => [
+            'typo3' => '8.7.0-9.5.99',
+        ],
+        'conflicts' => [
+        ],
+        'suggests' => [
+        ],
+    ],
+];
