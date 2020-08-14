@@ -13,7 +13,7 @@
   },
   "require-dev": {
     "nimut/testing-framework": "^4.1",
-    "nimut/typo3-complete": "^8.7"
+    "nimut/typo3-complete": "^9.5"
   },
   "authors": [
     {
