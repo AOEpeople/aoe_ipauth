@@ -4,7 +4,6 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 $_EXTKEY = 'aoe_ipauth';
-//var_dump($_EXTCONF);
 $backendConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('backend');
 
 //var_dump($backendConfiguration);
