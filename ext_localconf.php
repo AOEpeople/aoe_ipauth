@@ -6,7 +6,6 @@ if (!defined('TYPO3_MODE')) {
 $_EXTKEY = 'aoe_ipauth';
 $backendConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('backend');
 
-//var_dump($backendConfiguration);
 if ('BE' === TYPO3_MODE) {
     // Do not show the IP records in the listing
     $allowedTablesTs = '
