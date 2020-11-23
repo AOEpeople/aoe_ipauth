@@ -12,8 +12,8 @@
     "typo3/cms-core": ">=9.5.0,<=10.4.99"
   },
   "require-dev": {
-    "nimut/testing-framework": "^4.1",
-    "nimut/typo3-complete": "^9.5"
+    "nimut/testing-framework": "^5.0",
+    "nimut/typo3-complete": "^10.4"
   },
   "authors": [
     {
