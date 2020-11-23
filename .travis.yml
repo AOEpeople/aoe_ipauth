@@ -1,4 +1,5 @@
 language: php
+dist: bionic
 
 notifications:
   email:
@@ -119,5 +120,5 @@ jobs:
             TAG_MESSAGE=`git log -1 --pretty=%B`
             echo "Tag-Message: ${TAG_MESSAGE}"
             echo "Uploading release ${TRAVIS_TAG} to TER"
-            $HOME/.composer/vendor/bin/ter-client upload typo3_console . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
+            $HOME/.config/composer/vendor/bin/ter-client upload typo3_console . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
           fi;
