@@ -3,6 +3,8 @@
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
+$_EXTKEY = 'aoe_ipauth';
+$backendConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('backend');
 
 if ('BE' === TYPO3_MODE) {
     // Do not show the IP records in the listing
@@ -15,9 +17,11 @@ if ('BE' === TYPO3_MODE) {
     // Hooks
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][$_EXTKEY] = \AOE\AoeIpauth\Hooks\Tcemain::class;
 } elseif ('FE' === TYPO3_MODE) {
-    $extensionConfiguration = unserialize($_EXTCONF);
+    $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
+    )->get($_EXTKEY);
     $GLOBALS['TYPO3_CONF_VARS']['SVCONF']['auth']['setup']['FE_fetchUserIfNoSession'] =
-        isset($extensionConfiguration['fetchFeUserIfNoSession']) ? $extensionConfiguration['fetchFeUserIfNoSession'] : 1;
+        isset($extensionConfiguration['fetchFeUserIfNoSession']) ? boolval($extensionConfiguration['fetchFeUserIfNoSession']) : 1;
     unset($extensionConfiguration);
 }
 
