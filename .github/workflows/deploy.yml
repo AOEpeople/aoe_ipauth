@@ -25,4 +25,5 @@ jobs:
           TAG_MESSAGE=`git log -1 --pretty=%B`
           echo "Tag-Message: ${TAG_MESSAGE}"
           echo "Uploading release ${TRAVIS_TAG} to TER"
-          $HOME/.config/composer/vendor/bin/ter-client
+          find / -name 'ter-client' -type f
+          #$HOME/.config/composer/vendor/bin/ter-client
