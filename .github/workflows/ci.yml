@@ -34,13 +34,10 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate
 
-      - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
+      - name: Install dependencies with nimut/typo3-complete:${{ matrix.typo3 }}
         run: |
           composer require nimut/typo3-complete:${{ matrix.typo3 }} --no-progress
           git checkout composer.json
-          export "TYPO3_PATH_WEB"=$PWD/.Build/Web;
-          export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
-          export "FUNCTIONAL_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml
           ln -nfs .Build/vendor/typo3/cms/typo3 typo3
 
       - name: Lint PHP
@@ -84,7 +81,7 @@ jobs:
           typo3DatabasePassword: root
           typo3DatabaseUsername: root
 
-      - name: Upload coverage results to Coveralls
+      - name: Upload coverage results to Scrutinizer
         if: matrix.typo3 == '^10.4'
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
