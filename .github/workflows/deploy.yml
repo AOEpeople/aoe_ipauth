@@ -13,17 +13,19 @@ jobs:
 
       - name: Deploy to TER
         run: |
-          echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
+          if [ -n "$TYPO3_ORG_USERNAME" ] && [ -n "$TYPO3_ORG_PASSWORD" ]; then
+            echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
 
-          # Install ter client
-          composer global require helhum/ter-client
+            # Install ter client
+            composer global require helhum/ter-client
 
-          # Build extension files
-          composer extension-release
+            # Build extension files
+            composer extension-release
 
-          # Upload
-          TAG_MESSAGE=`git log -1 --pretty=%B`
-          echo "Tag-Message: ${TAG_MESSAGE}"
-          echo "Uploading release ${TRAVIS_TAG} to TER"
-          find / -name 'ter-client' -type f
-          #$HOME/.config/composer/vendor/bin/ter-client
+            # Upload
+            TAG_MESSAGE=`git log -1 --pretty=%B`
+            echo "Tag-Message: ${TAG_MESSAGE}"
+            echo "Uploading release ${TRAVIS_TAG} to TER"
+            $HOME/.composer/vendor/helhum/ter-client/ter-client
+            #$HOME/.composer/vendor/helhum/ter-client/ter-client aoe_ipauth . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
+          fi;
