@@ -1,3 +1,4 @@
 .Build
+var/
 .idea
 composer.lock
