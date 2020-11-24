@@ -3,7 +3,7 @@ name: DEPLOY
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "**"
 
 jobs:
   test:
