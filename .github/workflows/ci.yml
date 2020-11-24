@@ -51,14 +51,21 @@ jobs:
 
       - name: Unit Tests without coverage
         if: matrix.typo3 == '^9.5'
-        run: .Build/bin/phpunit --colors  -c $UNIT_XML Tests/Unit/
+        run: |
+          export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
+          .Build/bin/phpunit --colors  -c $UNIT_XML Tests/Unit/
+
 
       - name: Unit Tests with coverage
         if: matrix.typo3 == '^10.4'
-        run: .Build/bin/phpunit --coverage-clover=unittest-coverage.clover --colors -c $UNIT_XML Tests/Unit/
+        run: |
+          export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
+          .Build/bin/phpunit --coverage-clover=unittest-coverage.clover --colors -c $UNIT_XML Tests/Unit/
 
       - name: Functional Tests without coverage
-        run: find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo "Running functional test suite {}"; .Build/bin/phpunit --coverage-clover={}functionaltest-coverage.clover --colors  -c $FUNCTIONAL_XML {}'
+        run: |
+          export "FUNCTIONAL_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml
+          find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo "Running functional test suite {}"; .Build/bin/phpunit --coverage-clover={}functionaltest-coverage.clover --colors  -c $FUNCTIONAL_XML {}'
         if: matrix.typo3 == '^9.5'
         env:
           typo3DatabaseHost: 127.0.0.1
@@ -68,8 +75,8 @@ jobs:
 
       - name: Functional Tests with coverage
         run: |
+          export "FUNCTIONAL_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml
           find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo "Running functional test suite {}"; .Build/bin/phpunit --coverage-clover={}functionaltest-coverage.clover --colors  -c $FUNCTIONAL_XML {}'
-
         if: matrix.typo3 == '^10.4'
         env:
           typo3DatabaseHost: 127.0.0.1
