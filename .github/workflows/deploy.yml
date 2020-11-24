@@ -6,12 +6,12 @@ on:
       - "**"
 
 jobs:
-  test:
+  TER:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Deploy
+      - name: Deploy to TER
         run: |
           echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
 
