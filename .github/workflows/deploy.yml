@@ -1,0 +1,28 @@
+name: DEPLOY
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy
+        run: |
+          echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n";
+
+          # Install ter client
+          composer global require helhum/ter-client
+
+          # Build extension files
+          composer extension-release
+
+          # Upload
+          TAG_MESSAGE=`git log -1 --pretty=%B`
+          echo "Tag-Message: ${TAG_MESSAGE}"
+          echo "Uploading release ${TRAVIS_TAG} to TER"
+          $HOME/.config/composer/vendor/bin/ter-client
