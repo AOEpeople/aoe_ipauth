@@ -144,7 +144,7 @@ class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();
-        $entities = $queryBuilder->select('uid','pid')
+        $entities = $queryBuilder->select('*')
             ->from($table)
             ->where(
                 $queryBuilder->expr()->gt('tx_aoeipauth_ip', '0' . EnableFieldsUtility::enableFields($table))
