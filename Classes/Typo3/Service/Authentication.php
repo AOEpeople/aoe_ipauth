@@ -127,6 +127,16 @@ class Authentication extends AbstractAuthenticationService
 
         if ($ipMatches) {
             $authCode = 200;
+
+            // hook which will be fired after user has been authenticated
+            if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['aoe_ipauth']['authUserIpMatches'])) {
+                foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['aoe_ipauth']['authUserIpMatches'] as $className) {
+                    $hookObject = GeneralUtility::makeInstance($className);
+                    if (method_exists($hookObject, 'process')) {
+                        $hookObject->process($user);
+                    }
+                }
+            }
         }
 
         return $authCode;
