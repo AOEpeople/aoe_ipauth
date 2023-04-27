@@ -64,6 +64,7 @@
       "dev-master": "2.0.x-dev"
     },
     "typo3/cms": {
+      "extension-key": "aoe_ipauth",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
     }
