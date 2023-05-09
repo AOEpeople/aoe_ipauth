@@ -24,7 +24,7 @@ namespace AOE\AoeIpauth\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +32,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Service
  */
-class IpMatchingService implements \TYPO3\CMS\Core\SingletonInterface
+class IpMatchingService implements SingletonInterface
 {
 
     const NORMAL_IP_TYPE = 0;

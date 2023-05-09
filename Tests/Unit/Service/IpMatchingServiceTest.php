@@ -24,7 +24,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use AOE\AoeIpauth\Service\IpMatchingService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -37,7 +37,7 @@ class IpMatchingServiceTest extends UnitTestCase
 {
 
     /**
-     * @var \AOE\AoeIpauth\Service\IpMatchingService
+     * @var IpMatchingService
      */
     protected $fixture;
 

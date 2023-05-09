@@ -24,7 +24,11 @@ namespace AOE\AoeIpauth\Typo3\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use AOE\AoeIpauth\Service\IpMatchingService;
+use AOE\AoeIpauth\Domain\Service\FeEntityService;
+use AOE\AoeIpauth\Domain\Service\IpService;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Authentication\AbstractAuthenticationService;
 
@@ -37,17 +41,17 @@ class Authentication extends AbstractAuthenticationService
 {
 
     /**
-     * @var \AOE\AoeIpauth\Service\IpMatchingService
+     * @var IpMatchingService
      */
     protected $ipMatchingService = null;
 
     /**
-     * @var \AOE\AoeIpauth\Domain\Service\FeEntityService
+     * @var FeEntityService
      */
     protected $feEntityService = null;
 
     /**
-     * @var \AOE\AoeIpauth\Domain\Service\IpService
+     * @var IpService
      */
     protected $ipService = null;
 
@@ -63,11 +67,11 @@ class Authentication extends AbstractAuthenticationService
             return;
         }
 
-        if (!isset($GLOBALS['TCA'][\AOE\AoeIpauth\Domain\Service\FeEntityService::TABLE_USER])) {
+        if (!isset($GLOBALS['TCA'][FeEntityService::TABLE_USER])) {
             if (empty($GLOBALS['TSFE']->sys_page)) {
-                $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
+                $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
             }
-            if (version_compare(TYPO3_version, '7.0.0', '<')) {
+            if (version_compare(GeneralUtility::makeInstance(Typo3Version::class)->getVersion(), '7.0.0', '<')) {
                 $GLOBALS['TSFE']->getCompressedTCarray();
             }
         }
@@ -214,7 +218,7 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * @return \AOE\AoeIpauth\Domain\Service\FeEntityService
+     * @return FeEntityService
      */
     protected function getFeEntityService()
     {
@@ -225,7 +229,7 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * @return \AOE\AoeIpauth\Domain\Service\IpService
+     * @return IpService
      */
     protected function getIpService()
     {
@@ -236,7 +240,7 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * @return \AOE\AoeIpauth\Service\IpMatchingService
+     * @return IpMatchingService
      */
     protected function getIpMatchingService()
     {

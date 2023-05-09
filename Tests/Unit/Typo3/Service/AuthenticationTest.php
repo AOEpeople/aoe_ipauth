@@ -24,7 +24,7 @@ namespace AOE\AoeIpauth\Tests\Unit\Typo3\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use AOE\AoeIpauth\Typo3\Service\Authentication;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -37,7 +37,7 @@ class AuthenticationTest extends UnitTestCase
 {
 
     /**
-     * @var \AOE\AoeIpauth\Typo3\Service\Authentication
+     * @var Authentication
      */
     protected $fixture;
 

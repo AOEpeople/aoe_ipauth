@@ -23,7 +23,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 // Add IP Options to fe_users table
 $tempColumns = array(
