@@ -24,7 +24,8 @@ namespace AOE\AoeIpauth\Domain\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\SingletonInterface;
+use AOE\AoeIpauth\Service\IpMatchingService;
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -34,19 +35,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Domain\Service
  */
-class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface
+class FeEntityService implements SingletonInterface
 {
 
     const TABLE_GROUP = 'fe_groups';
     const TABLE_USER = 'fe_users';
 
     /**
-     * @var \AOE\AoeIpauth\Domain\Service\IpService
+     * @var IpService
      */
     protected $ipService = null;
 
     /**
-     * @var \AOE\AoeIpauth\Service\IpMatchingService
+     * @var IpMatchingService
      */
     protected $ipMatchingService = null;
 
@@ -144,7 +145,7 @@ class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
         $queryBuilder->getRestrictions()->removeAll();
-        $entities = $queryBuilder->select('uid','pid')
+        $entities = $queryBuilder->select('*')
             ->from($table)
             ->where(
                 $queryBuilder->expr()->gt('tx_aoeipauth_ip', '0' . EnableFieldsUtility::enableFields($table))
@@ -182,7 +183,7 @@ class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
-     * @return \AOE\AoeIpauth\Domain\Service\IpService
+     * @return IpService
      */
     protected function getIpService()
     {
@@ -193,7 +194,7 @@ class FeEntityService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
-     * @return \AOE\AoeIpauth\Service\IpMatchingService
+     * @return IpMatchingService
      */
     protected function getIpMatchingService()
     {

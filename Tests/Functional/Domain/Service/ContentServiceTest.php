@@ -24,7 +24,8 @@ namespace AOE\AoeIpauth\Tests\Functional\Domain\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use AOE\AoeIpauth\Domain\Service\ContentService;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -37,12 +38,12 @@ class ContentServiceTest extends FunctionalTestCase
 {
 
     /**
-     * @var \AOE\AoeIpauth\Domain\Service\ContentService
+     * @var ContentService
      */
     protected $fixture;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 

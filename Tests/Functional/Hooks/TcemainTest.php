@@ -37,7 +37,7 @@ class TcemainTest extends FunctionalTestCase
 {
 
     /**
-     * @var \AOE\AoeIpauth\Hooks\Tcemain
+     * @var Tcemain
      */
     protected $fixture;
 

@@ -24,7 +24,7 @@ namespace AOE\AoeIpauth\Domain\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\SingletonInterface;
 use AOE\AoeIpauth\Utility\EnableFieldsUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -34,7 +34,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Domain\Service
  */
-class IpService implements  \TYPO3\CMS\Core\SingletonInterface
+class IpService implements  SingletonInterface
 {
 
     const TABLE = 'tx_aoeipauth_domain_model_ip';

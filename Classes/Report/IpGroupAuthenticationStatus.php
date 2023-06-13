@@ -24,7 +24,10 @@ namespace AOE\AoeIpauth\Report;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Reports\StatusProviderInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use AOE\AoeIpauth\Domain\Service\FeEntityService;
+use TYPO3\CMS\Reports\Status;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -33,11 +36,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package AOE\AoeIpauth\Report
  */
-class IpGroupAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderInterface
+class IpGroupAuthenticationStatus implements StatusProviderInterface
 {
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -73,7 +76,7 @@ class IpGroupAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderIn
      */
     protected function analyseUserGroups(&$reports)
     {
-        /** @var \AOE\AoeIpauth\Domain\Service\FeEntityService $service */
+        /** @var FeEntityService $service */
         $service = $this->objectManager->get('AOE\\AoeIpauth\\Domain\\Service\\FeEntityService');
 
         $userGroups = $service->findAllGroupsWithIpAuthentication();
@@ -86,7 +89,7 @@ class IpGroupAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderIn
                 'No user groups with IP authentication found',
                 'No user groups were found anywhere that are active and have an automatic IP authentication enabled.' .
                     'Your current IP is: <strong>' . $this->myIp . '</strong>',
-                \TYPO3\CMS\Reports\Status::INFO
+                Status::INFO
             );
         } else {
             $thisUrl = urlencode(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
@@ -119,7 +122,7 @@ class IpGroupAuthenticationStatus implements \TYPO3\CMS\Reports\StatusProviderIn
                 'IP Usergroup Authentication',
                 'Some groups with automatic IP authentication were found.',
                 $userGroupInfo,
-                \TYPO3\CMS\Reports\Status::OK
+                Status::OK
             );
         }
     }

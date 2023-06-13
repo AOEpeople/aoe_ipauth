@@ -24,7 +24,11 @@ namespace AOE\AoeIpauth\Typo3\Service;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use AOE\AoeIpauth\Service\IpMatchingService;
+use AOE\AoeIpauth\Domain\Service\FeEntityService;
+use AOE\AoeIpauth\Domain\Service\IpService;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Authentication\AbstractAuthenticationService;
 
@@ -37,17 +41,17 @@ class Authentication extends AbstractAuthenticationService
 {
 
     /**
-     * @var \AOE\AoeIpauth\Service\IpMatchingService
+     * @var IpMatchingService
      */
     protected $ipMatchingService = null;
 
     /**
-     * @var \AOE\AoeIpauth\Domain\Service\FeEntityService
+     * @var FeEntityService
      */
     protected $feEntityService = null;
 
     /**
-     * @var \AOE\AoeIpauth\Domain\Service\IpService
+     * @var IpService
      */
     protected $ipService = null;
 
@@ -63,11 +67,11 @@ class Authentication extends AbstractAuthenticationService
             return;
         }
 
-        if (!isset($GLOBALS['TCA'][\AOE\AoeIpauth\Domain\Service\FeEntityService::TABLE_USER])) {
+        if (!isset($GLOBALS['TCA'][FeEntityService::TABLE_USER])) {
             if (empty($GLOBALS['TSFE']->sys_page)) {
-                $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
+                $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
             }
-            if (version_compare(TYPO3_version, '7.0.0', '<')) {
+            if (version_compare(GeneralUtility::makeInstance(Typo3Version::class)->getVersion(), '7.0.0', '<')) {
                 $GLOBALS['TSFE']->getCompressedTCarray();
             }
         }
@@ -127,35 +131,19 @@ class Authentication extends AbstractAuthenticationService
 
         if ($ipMatches) {
             $authCode = 200;
+
+            // hook which will be fired after user has been authenticated
+            if (!empty($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['aoe_ipauth']['authUserIpMatches'])) {
+                foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['aoe_ipauth']['authUserIpMatches'] as $className) {
+                    $hookObject = GeneralUtility::makeInstance($className);
+                    if (method_exists($hookObject, 'process')) {
+                        $hookObject->process($user);
+                    }
+                }
+            }
         }
 
         return $authCode;
-    }
-
-    /**
-     * Get the group list
-     *
-     * @param string $user
-     * @param array $knownGroups
-     * @return array
-     */
-    public function getGroups($user, $knownGroups)
-    {
-        // Do not respond to non-FE group calls
-        if ('getGroupsFE' != $this->mode) {
-            return $knownGroups;
-        }
-
-        $this->safeguardContext();
-
-        $clientIp = $this->authInfo['REMOTE_ADDR'];
-        $ipAuthenticatedGroups = $this->findAllGroupsByIpAuthentication($clientIp);
-
-        if (!empty($ipAuthenticatedGroups)) {
-            $knownGroups = array_merge($ipAuthenticatedGroups, $knownGroups);
-        }
-
-        return $knownGroups;
     }
 
     /**
@@ -192,19 +180,7 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * Finds all groups with IP authentication enabled
-     *
-     * @param string $ip
-     * @return array
-     */
-    protected function findAllGroupsByIpAuthentication($ip)
-    {
-        $groups = $this->getFeEntityService()->findAllGroupsAuthenticatedByIp($ip);
-        return $groups;
-    }
-
-    /**
-     * @return \AOE\AoeIpauth\Domain\Service\FeEntityService
+     * @return FeEntityService
      */
     protected function getFeEntityService()
     {
@@ -215,7 +191,7 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * @return \AOE\AoeIpauth\Domain\Service\IpService
+     * @return IpService
      */
     protected function getIpService()
     {
@@ -226,7 +202,7 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * @return \AOE\AoeIpauth\Service\IpMatchingService
+     * @return IpMatchingService
      */
     protected function getIpMatchingService()
     {

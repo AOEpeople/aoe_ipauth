@@ -9,7 +9,7 @@
     "issues": "https://github.com/AOEpeople/aoe_ipauth/issues"
   },
   "require": {
-    "typo3/cms-core": "^9.5 || ^10.4 || dev-master"
+    "typo3/cms-core": "^11.5"
   },
   "require-dev": {
     "nimut/testing-framework": "^5.0",
@@ -64,6 +64,7 @@
       "dev-master": "2.0.x-dev"
     },
     "typo3/cms": {
+      "extension-key": "aoe_ipauth",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
     }

@@ -24,7 +24,7 @@ namespace AOE\AoeIpauth\Hooks;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use AOE\AoeIpauth\Service\IpMatchingService;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -67,7 +67,7 @@ class Tcemain
             return;
         }
 
-        /** @var \AOE\AoeIpauth\Service\IpMatchingService $ipMatchingService */
+        /** @var IpMatchingService $ipMatchingService */
         $ipMatchingService = $this->objectManager->get(IpMatchingService::class);
 
         $potentialIp = $fieldArray['ip'];
@@ -107,7 +107,7 @@ class Tcemain
             'The new IP (<strong>' . $potentialIp . '</strong>) ' .
                 'you entered was neither a valid IP nor a valid range. ' .
                 'The change was rejected.',
-            FlashMessage::ERROR
+            AbstractMessage::ERROR
         );
     }
 
