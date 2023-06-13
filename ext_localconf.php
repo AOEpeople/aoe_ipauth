@@ -25,7 +25,7 @@ defined('TYPO3') or die();
         array(
             'title' => 'IP Authentication',
             'description' => 'Authenticates against IP addresses and ranges.',
-            'subtype' => 'authUserFE,getUserFE,getGroupsFE',
+            'subtype' => 'authUserFE,getUserFE',
             'available' => true,
             // Must be higher than for tx_sv_auth (50) or tx_sv_auth will deny request unconditionally
             'priority' => 80,

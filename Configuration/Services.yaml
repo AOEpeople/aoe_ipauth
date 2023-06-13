@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  AOE\AoeIpauth\:
+    resource: '../Classes/*'
+
+  AOE\AoeIpauth\EventListener\ModifyFeGroups:
+    tags:
+      - name: event.listener
+        identifier: 'modifyFeGroupsListener'
+        event: TYPO3\CMS\Frontend\Authentication\ModifyResolvedFrontendGroupsEvent
