@@ -147,32 +147,6 @@ class Authentication extends AbstractAuthenticationService
     }
 
     /**
-     * Get the group list
-     *
-     * @param string $user
-     * @param array $knownGroups
-     * @return array
-     */
-    public function getGroups($user, $knownGroups)
-    {
-        // Do not respond to non-FE group calls
-        if ('getGroupsFE' != $this->mode) {
-            return $knownGroups;
-        }
-
-        $this->safeguardContext();
-
-        $clientIp = $this->authInfo['REMOTE_ADDR'];
-        $ipAuthenticatedGroups = $this->findAllGroupsByIpAuthentication($clientIp);
-
-        if (!empty($ipAuthenticatedGroups)) {
-            $knownGroups = array_merge($ipAuthenticatedGroups, $knownGroups);
-        }
-
-        return $knownGroups;
-    }
-
-    /**
      * Returns TRUE if the userId's associated IPs match the client IP
      *
      * @param int $userId
@@ -203,18 +177,6 @@ class Authentication extends AbstractAuthenticationService
     {
         $users = $this->getFeEntityService()->findAllUsersAuthenticatedByIp($ip);
         return $users;
-    }
-
-    /**
-     * Finds all groups with IP authentication enabled
-     *
-     * @param string $ip
-     * @return array
-     */
-    protected function findAllGroupsByIpAuthentication($ip)
-    {
-        $groups = $this->getFeEntityService()->findAllGroupsAuthenticatedByIp($ip);
-        return $groups;
     }
 
     /**
